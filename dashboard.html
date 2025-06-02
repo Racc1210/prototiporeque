@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fitness Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Usamos el CDN de Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* ─── Estilos Generales ───────────────────────────────────────────── */
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: linear-gradient(to right, #ff9800, #ffeb3b);
+    }
+    /* ─── Sidebar (Menú lateral) ───────────────────────────────────────── */
+    .sidebar {
+      width: 250px;
+      background: #fff;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: fixed;
+      top: 80px; /* debajo del header */
+      left: 0;
+      height: calc(150vh - 120px);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1001;
+    }
+    .sidebar.show {
+      transform: translateX(0);
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 10px;
+      text-decoration: none;
+      color: #000;
+      font-weight: 700;
+      font-size: 1.1em;
+      transition: background 0.3s ease;
+    }
+    .sidebar a:hover {
+      background: #f7f7f7;
+      border-radius: 8px;
+    }
+    .sidebar i {
+      margin-right: 15px;
+      font-size: 1.8em;
+      color: green;
+    }
+    /* ─── Header ───────────────────────────────────────────────────────── */
+    .header {
+      height: 60px;
+      background: #00C853;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1002;
+    }
+    .header #menuToggle {
+      font-size: 28px;
+      padding: 10px;
+      cursor: pointer;
+      color: white;
+    }
+    .header .location {
+      background: #666;
+      padding: 5px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      margin: 0 auto;
+    }
+    /* Ícono de usuario agrandado */
+    .user-icon {
+      cursor: pointer;
+      font-size: 2.5em;
+    }
+    /* Menú desplegable para el usuario */
+    .user-menu {
+      display: none;
+      position: absolute;
+      top: 65px;       /* ligeramente debajo del header */
+      right: 20px;
+      width: 200px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      z-index: 1003;
+      padding: 10px 0;
+    }
+    .user-menu::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      right: 30px; /* ajusta para centrar la flecha respecto al ícono */
+      border-width: 0 10px 10px;
+      border-style: solid;
+      border-color: transparent transparent #fff transparent;
+    }
+    .user-menu a {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+    .user-menu a:hover {
+      background: #f0f0f0;
+    }
+    /* ─── Contenedor Principal (Dashboard) ─────────────────────────── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+      padding-bottom: 60px; /* para que no se sobreponga el FAB */
+    }
+    .view {
+    display: none;
+    }
+
+    /* ─── Card Container (Carrusel) ───────────────────────────────────── */
+    .card-container {
+    width: 70%;
+    max-width: 640px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    padding: 10px;
+    position: relative;
+    margin: 300px auto 0;
+  }
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 2em;
+    color: #00C853;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    padding: 5px;
+    z-index: 10;
+  }
+  .arrow.arrow-left {
+    left: 10px;
+  }
+  .arrow.arrow-right {
+    right: 10px;
+  }
+  .carousel-wrapper {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    display: flex;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 auto;
+  }
+  .carousel-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  .featured {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+  .carousel-controls {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    background: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .carousel-dot.active {
+    background: #00C853;
+  }
+  
+   
+    /* Botón de Acción Flotante (FAB) */
+    .fab {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: #00C853;
+      color: white;
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .fab i {
+      margin-right: 8px;
+    }
+    /* ─── Contenedor de Perfil (vista de Usuario) ───────────────────── */
+    #profileContainer {
+    width: 70%;
+    max-width: 640px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    padding: 20px;
+    margin: 100px auto 0;
+    display: none;
+  }
+  #profileContainer h1 {
+    text-align: center;
+    color: #00C853;
+    margin-bottom: 20px;
+  }
+  #profileContainer p {
+    font-size: 1.1em;
+    margin: 10px 0;
+  }
+  #profileContainer label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  #profileContainer input,
+  #profileContainer select {
+    padding: 8px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  #profileContainer .field-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  #profileContainer .field-group div {
+    flex: 1;
+  }
+  #profileContainer .profile-icon {
+    display: block;
+    margin: 0 auto 20px;
+    font-size: 5em;
+    color: #00C853;
+    text-align: center;
+  }
+  .btn-block {
+    display: block;
+    width: 100%;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  #btnCambiarPass {
+    background: #ffc107;
+    color: #000;
+  }
+  #btnGuardarCambios {
+    background: #00C853;
+    color: white;
+  }
+  #backToDash {
+    background: #00C853;
+    color: white;
+  }
+  #mensajeGuardado {
+    text-align: center;
+    margin-top: 15px;
+    color: #4CAF50;
+    font-weight: bold;
+    display: none;
+  }
+
+  #crearActividadContainer {
+    width: 70%;
+    max-width: 640px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    padding: 20px;
+    margin: 100px auto;
+    display: none;
+  }
+  #crearActividadContainer h2 {
+    text-align: center;
+    color: #00C853;
+    margin-bottom: 20px;
+  }
+  #crearActividadContainer label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+  #crearActividadContainer input,
+  #crearActividadContainer textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  #crearActividadContainer button {
+    display: block;
+    margin: 20px auto 0;
+    background: #00C853;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  #map {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+    /* Vista Calendario con Tema Oscuro */
+/* Vista Calendario (Modal centrado) */
+/* Estilos para el calendario modal, agrupado por días */
+#calendarContainer {
+  position: fixed;             
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 640px;
+  background: #1a1a1a;         /* Fondo oscuro */
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  z-index: 2000;               /* Encima de otros elementos */
+  display: none;               /* Oculto por defecto */
+  color: #fff;
+}
+#calendarContainer h1 {
+  text-align: center;
+  color: #00C853;
+  margin-bottom: 20px;
+}
+.day-group {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
+.day-group h2 {
+  margin: 0;
+  padding: 5px 0;
+  color: #00C853;
+  font-size: 1.2em;
+}
+.event {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 0.95em;
+}
+.event-title {
+  font-weight: bold;
+}
+.event-time {
+  font-style: italic;
+}
+#listaActividadesContainer {
+    width: 80%;
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    display: none;
+  }
+  #filtroBusqueda {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+  }
+  .actividad-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+  }
+  .actividad-card h3 {
+    margin: 0 0 10px;
+    color: #00C853;
+  }
+
+  #actividadDetalleContainer {
+    width: 80%;
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    display: none;
+  }
+  #actividadDetalleContainer h2 {
+    color: #00C853;
+    margin-bottom: 15px;
+  }
+  #detalleMapa {
+    height: 300px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  #btnInscribirse,#btnVolverLista {
+    background-color: #00C853;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+
+  </style>
+</head>
+<body>
+  <!-- Sidebar (Menú lateral) -->
+  <div class="sidebar" id="sidebar">
+    <a href="#" id="btnInicio"><i class="fas fa-home"></i> Inicio</a>
+    <a href="#" id="btnCalendario"><i class="fas fa-calendar-alt"></i> Mi calendario</a>
+    <a href="#" id="btnListaActividades"> <i class="fas fa-tasks"></i> Lista de actividades</a>
+    <a href="#"><i class="fas fa-question-circle"></i> ¿Te gustaría ser moderador del sitio?</a>
+  </div>
+  
+  <!-- Contenido Principal del Dashboard -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <i class="fas fa-bars" id="menuToggle"></i>
+      <div class="location" id="location">Cantón central de Limón</div>
+      <!-- Ícono de usuario -->
+      <i class="fas fa-user-circle user-icon" id="userIcon"></i>
+      <!-- Menú desplegable para el usuario -->
+      <div id="userMenu" class="user-menu">
+        <a href="#" id="viewProfile">Ver perfil</a>
+        <a href="#" id="logoutLink">Cerrar sesión</a>
+      </div>
+    </div>
+    
+    <!-- Vista Dashboard (Carrusel, iconos sociales y FAB) -->
+  <div id="dashboardView" class="view" style="display: block;">
+  <div class="card-container">
+    <div class="arrow arrow-left"><i class="fas fa-arrow-left"></i></div>
+    <div class="carousel-wrapper">
+      <div class="featured">
+        <i class="fas fa-calendar-alt" style="font-size:4em; color:#00C853; margin-bottom:15px;"></i>
+        <h3>Fechas de Actividades</h3>
+        <p>Consulta cuándo serán tus próximas actividades</p>
+      </div>
+      <div class="featured">
+        <i class="fas fa-running" style="font-size:4em; color:#00C853; margin-bottom:15px;"></i>
+        <h3>Actividad Destacada</h3>
+        <p>Conoce la actividad más popular del momento</p>
+      </div>
+      <div class="featured">
+        <i class="fas fa-comments" style="font-size:4em; color:#00C853; margin-bottom:15px;"></i>
+        <h3>Comunidades</h3>
+        <p>Conecta con otros participantes</p>
+      </div>
+    </div>
+    <div class="arrow arrow-right"><i class="fas fa-arrow-right"></i></div>
+    <div class="carousel-controls">
+      <div class="carousel-dot active"></div>
+      <div class="carousel-dot"></div>
+      <div class="carousel-dot"></div>
+    </div>
+  </div>
+  <div class="fab" id="generateActivity"><i class="fas fa-plus"></i> Generar actividad</div>
+</div>
+
+
+    <!-- Vista Perfil (Oculta inicialmente) -->
+    <div id="profileContainer" class="view">
+  <h1>Perfil de Usuario</h1>
+  <div class="profile-icon">
+    <i class="fas fa-user-circle"></i>
+  </div>
+  <p><strong>Nombre:</strong> Roymar Castillo</p>
+  <p><strong>Email:</strong> roymarcastillo@gmail.com</p>
+
+  <div class="field-group">
+    <div>
+      <label for="sexo">Sexo</label>
+      <select id="sexo">
+        <option selected disabled>Selecciona una opción</option>
+        <option value="femenino">Femenino</option>
+        <option value="masculino">Masculino</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+    <div>
+      <label for="fechaNacimiento">Fecha de nacimiento</label>
+      <input type="date" id="fechaNacimiento">
+    </div>
+  </div>
+
+  <button id="btnGuardarCambios" class="btn-block">Guardar cambios</button>
+  <div id="mensajeGuardado">¡Cambios guardados correctamente!</div>
+  <button id="btnCambiarPass" class="btn-block">Cambiar contraseña</button>
+  <button id="backToDash" class="btn-block">Volver al Dashboard</button>
+</div>
+  <!-- Nueva Vista de Calendario con tema oscuro -->
+<!-- Vista de Calendario (Modal) -->
+<!-- Vista de Calendario Modal (agrupado por día) -->
+
+<div id="crearActividadContainer" class="view">
+  <h2>Crear Actividad</h2>
+  <form id="formActividad">
+    <label for="tituloActividad">Título</label>
+    <input type="text" id="tituloActividad" required>
+
+    <label for="descripcionActividad">Descripción</label>
+    <textarea id="descripcionActividad" rows="4" required></textarea>
+
+    <label for="limiteParticipantes">Límite de Participantes</label>
+    <input type="number" id="limiteParticipantes" required min="1">
+
+    <label for="ubicacionActividad">Ubicación (elige en el mapa)</label>
+    <div id="map"></div>
+
+    <button type="submit">Guardar Actividad</button>
+  </form>
+</div>
+
+<div id="listaActividadesContainer" class="view">
+  <input type="text" id="filtroBusqueda" placeholder="Buscar por título o descripción...">
+  <div id="listaActividades"></div>
+</div>
+
+<div id="actividadDetalleContainer" class="view">
+  <h2 id="detalleTitulo"></h2>
+  <p id="detalleDescripcion"></p>
+  <div id="detalleMapa"></div>
+  <p id="detalleInscritos"></p>
+  <button id="btnInscribirse">Inscribirse</button>
+  <button id="btnVolverLista">Volver a la Lista</button>
+</div>
+
+<div id="calendarContainer" class="view">
+  <h1>Mi Calendario</h1>
+  <!-- Día 1 -->
+  <div class="day-group">
+    <h2>Mie, 3 may</h2>
+    <div class="event">
+      <span class="event-title">Punto de control #1</span>
+      <span class="event-time">8:00 AM - 8:30 AM</span>
+    </div>
+  </div>
+  <!-- Día 2 -->
+  <div class="day-group">
+    <h2>Mie, 10 may</h2>
+    <div class="event">
+      <span class="event-title">Punto de control #2</span>
+      <span class="event-time">8:00 AM - 8:30 AM</span>
+    </div>
+  </div>
+  <!-- Día 3 -->
+  <div class="day-group">
+    <h2>Jue, 12 may</h2>
+    <div class="event">
+      <span class="event-title">Examen #3</span>
+      <span class="event-time">7:30 AM - 9:20 AM</span>
+    </div>
+  </div>
+  <!-- Día 4 -->
+  <div class="day-group">
+    <h2>Mie, 17 may</h2>
+    <div class="event">
+      <span class="event-title">Entrega del proyecto 3</span>
+      <span class="event-time">7:30 AM - 9:20 AM</span>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Vinculamos el archivo JavaScript externo -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
