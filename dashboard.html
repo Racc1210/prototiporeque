@@ -197,8 +197,8 @@
     object-fit: cover;
   }
   .featured.center {
-    width: 600px;
-    height: 360px;
+    width: 450px;
+    height: 300px;
     transform: scale(1);
     opacity: 1;
     z-index: 2;
@@ -243,22 +243,38 @@
    
     /* Botón de Acción Flotante (FAB) */
     .fab {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background: #00C853;
-      color: white;
-      border-radius: 30px;
-      padding: 10px 20px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .fab i {
-      margin-right: 8px;
-    }
+  position: fixed;
+  bottom: 40px;
+  right: 50px;
+  background: linear-gradient(45deg, #00C853, #4CAF50);
+  color: white;
+  border-radius: 50px;
+  padding: 20px 24px;
+  font-family: 'Roboto';
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.fab i {
+  margin-right: 10px;
+  font-size: 1.2em;
+}
+
+/* efecto hover: agranda un poco el botón y refuerza la sombra */
+.fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* efecto active: lo reduce un poco para simular presionar */
+.fab:active {
+  transform: scale(0.98);
+}
     /* ─── Contenedor de Perfil (vista de Usuario) ───────────────────── */
     #profileContainer {
     width: 70%;
