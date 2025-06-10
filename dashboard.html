@@ -72,17 +72,35 @@
     }
     .header #menuToggle {
       font-size: 28px;
-      padding: 10px;
+      padding: 0px;
       cursor: pointer;
       color: white;
     }
     .header .location {
-      background: #666;
-      padding: 5px 10px;
-      border-radius: 15px;
-      cursor: pointer;
-      margin: 0 auto;
-    }
+  background: #666;
+  padding: 16px 25px;
+  border-radius: 40px;
+  cursor: pointer;
+  margin: 0 auto;
+  position: relative; /* Necesario para que el pseudo-elemento se posicione respecto al contenedor */
+  color: #fff;
+}
+
+/* El pseudo-elemento se posiciona a la izquierda y fuera de la caja */
+.header .location::before {
+  content: "";
+  position: absolute;
+  left: -65px;  /* Se desplaza hacia la izquierda. Ajusta este valor según el tamaño deseado y la separación */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;  /* Tamaño del pin */
+  height: 60px;
+  background-image: url('imagenes/location-pin.png'); /* Asegúrate de que la ruta sea correcta */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
     /* Ícono de usuario agrandado */
     .user-icon {
       cursor: pointer;
@@ -136,14 +154,54 @@
 
     /* ─── Card Container (Carrusel) ───────────────────────────────────── */
     .card-container {
-    width: 70%;
-    max-width: 640px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    padding: 10px;
+    width: 100vw;
+    max-width: 100%;
+    height: 400px;
     position: relative;
-    margin: 300px auto 0;
+    margin: 120px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .carousel-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    justify-content: center;
+    transition: transform 0.6s ease;
+  }
+  .featured {
+    flex-shrink: 0;
+    width: 300px;
+    height: 200px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transform: scale(0.85);
+    z-index: 1;
+  }
+  .featured img {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    object-fit: cover;
+  }
+  .featured.center {
+    width: 600px;
+    height: 360px;
+    transform: scale(1);
+    opacity: 1;
+    z-index: 2;
   }
   .arrow {
     position: absolute;
@@ -158,43 +216,23 @@
     z-index: 10;
   }
   .arrow.arrow-left {
-    left: 10px;
+    left: 150px;
   }
   .arrow.arrow-right {
-    right: 10px;
-  }
-  .carousel-wrapper {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    display: flex;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    margin: 0 auto;
-  }
-  .carousel-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-  .featured {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    box-sizing: border-box;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
+    right: 150px;
   }
   .carousel-controls {
-    margin-top: 15px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
     display: flex;
     justify-content: center;
     gap: 10px;
+    z-index: 5;
   }
   .carousel-dot {
-    width: 12px;
-    height: 12px;
+    width: 20px;
+    height: 20px;
     background: #ccc;
     border-radius: 50%;
     cursor: pointer;
@@ -202,7 +240,6 @@
   .carousel-dot.active {
     background: #00C853;
   }
-  
    
     /* Botón de Acción Flotante (FAB) */
     .fab {
@@ -468,10 +505,10 @@
   <div class="main-content">
     <!-- Header -->
     <div class="header">
-      <i class="fas fa-bars" id="menuToggle"></i>
+      <img src="imagenes/menu.png" alt="Menu"  style="width: 60px; height: 60;" id="menuToggle"></i>
       <div class="location" id="location">Cantón central de Limón</div>
       <!-- Ícono de usuario -->
-      <i class="fas fa-user-circle user-icon" id="userIcon"></i>
+      <img src="imagenes/usuario.png" alt="usuario"  style="width: 60px; height: 60;" id="userIcon"></i>
       <!-- Menú desplegable para el usuario -->
       <div id="userMenu" class="user-menu">
         <a href="#" id="viewProfile">Ver perfil</a>
@@ -483,32 +520,27 @@
   <div id="dashboardView" class="view" style="display: block;">
   <div class="card-container">
     <div class="arrow arrow-left"><i class="fas fa-arrow-left"></i></div>
-    <div class="carousel-wrapper">
+    <div class="carousel-wrapper" id="carouselWrapper">
       <div class="featured">
-        <i class="fas fa-calendar-alt" style="font-size:4em; color:#00C853; margin-bottom:15px;"></i>
-        <h3>Fechas de Actividades</h3>
-        <p>Consulta cuándo serán tus próximas actividades</p>
+        <img src="imagenes/calendario.png" alt="Calendario">
       </div>
       <div class="featured">
-        <i class="fas fa-running" style="font-size:4em; color:#00C853; margin-bottom:15px;"></i>
-        <h3>Actividad Destacada</h3>
-        <p>Conoce la actividad más popular del momento</p>
+        <img src="imagenes/actividad.png" alt="Principal">
       </div>
       <div class="featured">
-        <i class="fas fa-comments" style="font-size:4em; color:#00C853; margin-bottom:15px;"></i>
-        <h3>Comunidades</h3>
-        <p>Conecta con otros participantes</p>
+        <img src="imagenes/redes.png" alt="Redes Sociales">
       </div>
     </div>
     <div class="arrow arrow-right"><i class="fas fa-arrow-right"></i></div>
     <div class="carousel-controls">
-      <div class="carousel-dot active"></div>
-      <div class="carousel-dot"></div>
-      <div class="carousel-dot"></div>
+      <div class="carousel-dot" data-index="0"></div>
+      <div class="carousel-dot active" data-index="1"></div>
+      <div class="carousel-dot" data-index="2"></div>
     </div>
   </div>
   <div class="fab" id="generateActivity"><i class="fas fa-plus"></i> Generar actividad</div>
 </div>
+
 
 
     <!-- Vista Perfil (Oculta inicialmente) -->

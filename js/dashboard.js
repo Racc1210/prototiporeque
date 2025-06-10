@@ -139,62 +139,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ───────── Función para inicializar/reinicializar el carrusel ─────────
   function initCarousel() {
-    const carouselWrapper = document.querySelector('.carousel-wrapper');
-    if (!carouselWrapper) return;
-    const slides = document.querySelectorAll('.featured');
+    const wrapper = document.getElementById('carouselWrapper');
+    const slides = Array.from(wrapper.children);
     const dots = document.querySelectorAll('.carousel-dot');
-    const leftArrow = document.querySelector('.arrow.arrow-left');
-    const rightArrow = document.querySelector('.arrow.arrow-right');
-    let currentIndex = 0;
-    
-    function goToSlide(index) {
-      slides[index].scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center'
+    let currentIndex = 1;
+
+    function renderSlides() {
+      wrapper.innerHTML = '';
+      slides.forEach(slide => slide.classList.remove('center'));
+
+      const ordered = [
+        slides[(currentIndex - 1 + slides.length) % slides.length],
+        slides[currentIndex],
+        slides[(currentIndex + 1) % slides.length]
+      ];
+
+      ordered.forEach(slide => {
+        wrapper.appendChild(slide);
       });
+
+      requestAnimationFrame(() => {
+        ordered.forEach((slide, i) => {
+          slide.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+          slide.style.opacity = i === 1 ? '1' : '0.4';
+          slide.style.transform = i === 1 ? 'scale(1)' : 'scale(0.9)';
+          if (i === 1) slide.classList.add('center');
+        });
+      });
+
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[currentIndex].classList.add('active');
     }
-    
-    // Asignar eventos a cada dot
+
+    document.querySelector('.arrow-left').addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      renderSlides();
+    });
+
+    document.querySelector('.arrow-right').addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      renderSlides();
+    });
+
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => {
-        goToSlide(index);
+        currentIndex = index;
+        renderSlides();
       });
     });
-    
-    // Eventos para las flechas
-    leftArrow.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        goToSlide(currentIndex - 1);
-      }
-    });
-    
-    rightArrow.addEventListener('click', () => {
-      if (currentIndex < slides.length - 1) {
-        goToSlide(currentIndex + 1);
-      }
-    });
-    
-    // IntersectionObserver para detectar cuál slide se ve y actualizar los dots
-    const observerOptions = {
-      root: carouselWrapper,
-      threshold: 0.5
-    };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          currentIndex = Array.from(slides).indexOf(entry.target);
-          dots.forEach(dot => dot.classList.remove('active'));
-          if (dots[currentIndex]) {
-            dots[currentIndex].classList.add('active');
-          }
-        }
-      });
-    }, observerOptions);
-    
-    slides.forEach(slide => {
-      observer.observe(slide);
-    });
+
+    renderSlides();
   }
+
+
+
+
+
 
   // ───────── Toggle del Sidebar ─────────
   const menuToggle = document.getElementById('menuToggle');
@@ -232,6 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Se ocultan explícitamente las vistas de perfil y calendario
     document.getElementById('profileContainer').style.display = 'none';
     document.getElementById('calendarContainer').style.display = 'none';
+    document.getElementById('actividadDetalleContainer').style.display = 'none';
+    document.getElementById('listaActividadesContainer').style.display = 'none';
+
     // Contraer el sidebar
     document.getElementById('sidebar').classList.remove('show');
     // Reinicializamos el carrusel después de mostrar el dashboard
