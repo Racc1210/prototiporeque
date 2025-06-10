@@ -3,12 +3,6 @@ const codigoCorrecto = "123456";
 let intentos = 0;
 
 // Obtener el correo guardado en el registro
-const usuarioTemporal = JSON.parse(localStorage.getItem("usuarioTemporal"));
-if (!usuarioTemporal) {
-  window.location.href = "registro.html"; // Si no hay datos, redirige al registro
-} else {
-  document.getElementById("correoRegistrado").textContent = usuarioTemporal.correo;
-}
 
 // Validar código al enviar el formulario
 document.getElementById("formVerificacion").addEventListener("submit", function(e) {
