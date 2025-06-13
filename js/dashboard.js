@@ -822,18 +822,6 @@ function rechazarSolicitudModerador(solicitudId, motivo) {
   }
 ];
 
-// ...existing code...
-
-// Agregar en la función construirMenuLateral, después del evento de btnListaActividades:
-  document.getElementById('btnModerarActividades')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    hideAllViews();
-    document.getElementById('moderarActividadesContainer').style.display = 'block';
-    renderActividadesPendientes();
-    document.getElementById('sidebar').classList.remove('show');
-  });
-
-// ...existing code...
 
 // Agregar estas funciones antes del cierre del DOMContentLoaded:
 function renderActividadesPendientes() {
@@ -1017,11 +1005,12 @@ function rechazarActividad(actividadId, motivo) {
   // Agregar evento para moderadores
   document.getElementById('btnModerarActividades')?.addEventListener('click', (e) => {
     e.preventDefault();
-    hideAllViews();
+    hideAllViews(); 
     document.getElementById('moderarActividadesContainer').style.display = 'block';
     renderActividadesPendientes();
     document.getElementById('sidebar').classList.remove('show');
   });
+
 
   // Agregar evento para gestión de usuarios (solo admin)
   document.getElementById('btnGestionUsuarios')?.addEventListener('click', (e) => {
