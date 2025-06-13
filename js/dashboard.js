@@ -1,11 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
+  construirMenuLateral();
   initCarousel();
-
-
-  let actividades = [];
+  
+  let actividades = [
+  {
+    id: 1,
+    titulo: 'Entrenamiento Matutino',
+    descripcion: 'Sesión de ejercicio al aire libre en el parque central.',
+    limite: 10,
+    ubicacion: { lat: 9.998, lng: -83.753 }
+  },
+  {
+    id: 2,
+    titulo: 'Clase de Yoga',
+    descripcion: 'Clase de yoga para mejorar la flexibilidad y la concentración.',
+    limite: 15,
+    ubicacion: { lat: 9.7489, lng: -83.7534 }
+  },
+  {
+    id: 3,
+    titulo: 'Competencia de Ciclismo',
+    descripcion: 'Carrera de bicicletas para poner a prueba tu resistencia.',
+    limite: 20,
+    ubicacion: { lat: 9.900, lng: -84.000 }
+  }
+];
   let map, marker;
   let detalleMap, detalleMarker;
   let inscritosPorActividad = new Map();
+
+  actividades.forEach((act) => {
+  inscritosPorActividad.set(act.id, 0);
+  });
 
   const btnGenerarActividad = document.getElementById('generateActivity');
   const crearActividadContainer = document.getElementById('crearActividadContainer');
@@ -21,6 +47,68 @@ document.addEventListener('DOMContentLoaded', () => {
   const inscritosDetalle = document.getElementById('detalleInscritos');
   const btnInscribirse = document.getElementById('btnInscribirse');
   const btnVolverLista = document.getElementById('btnVolverLista');
+
+
+
+ function construirMenuLateral() {
+  const sidebar = document.getElementById('sidebar');
+  const role = localStorage.getItem('userRole');
+
+  let menuHTML = `
+    <a href="#" id="btnInicio"><i class="fas fa-home"></i> Inicio</a>
+  `;
+
+  if (role === 'user' || role === 'moderator') {
+    menuHTML +=  `
+    <a href="#" id="btnCalendario"><i class="fas fa-calendar-alt"></i> Mi calendario</a>
+    <a href="#" id="btnListaActividades"><i class="fas fa-tasks"></i> Lista de actividades</a>
+    `;
+  }
+
+  if (role === 'user') {
+    menuHTML += `<a href="#" id="btnSolicitudModerador"><i class="fas fa-user-plus"></i> Solicitar ser moderador</a>`;
+  }
+
+  if (role === 'moderator') {
+    menuHTML += `<a href="#" id="btnModerarActividades"><i class="fas fa-user-check"></i> Moderar actividades</a>`;
+  }
+
+  if (role === 'admin') {
+    menuHTML += `
+      <a href="#" id="btnGestionUsuarios"><i class="fas fa-user-shield"></i> Gestión de usuarios</a>
+      <a href="#" id="btnListaActividadesAdmin"><i class="fas fa-tasks"></i> Lista de actividades</a>
+      <a href="#" id= "btnRevisarSolicitudesModerador"><i class="fas fa-cogs"></i> Configuración</a>
+    `;
+  }
+
+  sidebar.innerHTML = menuHTML;
+
+  // Reasignar eventos a los botones si es necesario
+  document.getElementById('btnInicio')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    hideAllViews();
+    document.getElementById('dashboardView').style.display = 'block';
+    document.getElementById('sidebar').classList.remove('show');
+    initCarousel();
+  });
+
+  document.getElementById('btnCalendario')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    hideAllViews();
+    document.getElementById('calendarContainer').style.display = 'block';
+    document.getElementById('sidebar').classList.remove('show');
+  });
+
+  document.getElementById('btnListaActividades')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    hideAllViews();
+    document.getElementById('listaActividadesContainer').style.display = 'block';
+    renderListaActividades();
+    document.getElementById('sidebar').classList.remove('show');
+  });
+}
+
+
 
   function initMap() {
     map = L.map('map').setView([9.7489, -83.7534], 8);
@@ -69,14 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
     formActividad.reset();
     crearActividadContainer.style.display = 'none';
     document.getElementById('dashboardView').style.display = 'block';
-  });
-
-   btnListaActividades?.addEventListener('click', (e) => {
-    e.preventDefault();
-    hideAllViews();
-    listaActividadesContainer.style.display = 'block';
-    renderListaActividades();
-    document.getElementById('sidebar').classList.remove('show');
   });
 
   filtroBusqueda?.addEventListener('input', () => {
@@ -191,11 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSlides();
   }
 
-
-
-
-
-
   // ───────── Toggle del Sidebar ─────────
   const menuToggle = document.getElementById('menuToggle');
   menuToggle.addEventListener('click', () => {
@@ -221,34 +296,52 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'index.html';
   });
 
-  // ───────── Botón "Inicio" en el menú lateral ─────────
-  const btnInicio = document.getElementById('btnInicio');
-  btnInicio.addEventListener('click', (e) => {
-    e.preventDefault();
-    // Primero se ocultan todas las vistas
-    hideAllViews();
-    // Se muestra el dashboard
-    document.getElementById('dashboardView').style.display = 'block';
-    // Se ocultan explícitamente las vistas de perfil y calendario
-    document.getElementById('profileContainer').style.display = 'none';
-    document.getElementById('calendarContainer').style.display = 'none';
-    document.getElementById('actividadDetalleContainer').style.display = 'none';
-    document.getElementById('listaActividadesContainer').style.display = 'none';
+  const btnSolicitudModerador = document.getElementById('btnSolicitudModerador');
+  const solicitudContainer = document.getElementById('solicitudModeradorContainer');
+  const formSolicitud = document.getElementById('formSolicitudModerador');
+  const errorSolicitud = document.getElementById('errorSolicitud');
 
-    // Contraer el sidebar
-    document.getElementById('sidebar').classList.remove('show');
-    // Reinicializamos el carrusel después de mostrar el dashboard
-    initCarousel();
-  });
-
-  // ───────── Botón "Mi Calendario" en el menú lateral ─────────
-  const btnCalendario = document.getElementById('btnCalendario');
-  btnCalendario.addEventListener('click', (e) => {
+  btnSolicitudModerador?.addEventListener('click', (e) => {
     e.preventDefault();
     hideAllViews();
-    document.getElementById('calendarContainer').style.display = 'block';
-    document.getElementById('sidebar').classList.remove('show');
+    solicitudContainer.style.display = 'block';
   });
+
+  formSolicitud?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const telefono = document.getElementById('telefono').value.trim();
+  const cedula = document.getElementById('cedula').value.trim();
+  const motivo = document.getElementById('motivo').value.trim();
+
+  const telRegex = /^(\+506)?[ ]?(\d{4}-\d{4}|\d{8})$/;
+  const cedulaRegex = /^\d{1,2}-\d{4}-\d{4}$/;
+
+  if (!telRegex.test(telefono)) {
+    errorSolicitud.textContent = "Formato de teléfono inválido. Ej: 8888-8888 o +506 8888-8888";
+    errorSolicitud.style.display = "block";
+    return;
+  }
+
+  if (!cedulaRegex.test(cedula)) {
+    errorSolicitud.textContent = "Formato de cédula inválido. Ej: 1-0345-0789";
+    errorSolicitud.style.display = "block";
+    return;
+  }
+
+  if (motivo.length < 10) {
+    errorSolicitud.textContent = "Por favor detalla tu motivo (mínimo 10 caracteres).";
+    errorSolicitud.style.display = "block";
+    return;
+  }
+
+  errorSolicitud.style.display = "none";
+  alert("Tu solicitud ha sido enviada correctamente.");
+  formSolicitudModerador.reset();
+  document.getElementById('dashboardView').style.display = 'block';
+  document.getElementById('solicitudModeradorContainer').style.display = 'none';
+});
+
+
 
   // ───────── Funciones para la Vista de Perfil ─────────
   const viewProfileLink = document.getElementById('viewProfile');

@@ -277,82 +277,103 @@
   transform: scale(0.98);
 }
     /* ─── Contenedor de Perfil (vista de Usuario) ───────────────────── */
-    #profileContainer {
-    width: 70%;
-    max-width: 640px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    padding: 20px;
-    margin: 100px auto 0;
-    display: none;
-  }
-  #profileContainer h1 {
-    text-align: center;
-    color: #00C853;
-    margin-bottom: 20px;
-  }
-  #profileContainer p {
-    font-size: 1.1em;
-    margin: 10px 0;
-  }
-  #profileContainer label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-  }
-  #profileContainer input,
-  #profileContainer select {
-    padding: 8px;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  #profileContainer .field-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  #profileContainer .field-group div {
-    flex: 1;
-  }
-  #profileContainer .profile-icon {
-    display: block;
-    margin: 0 auto 20px;
-    font-size: 5em;
-    color: #00C853;
-    text-align: center;
-  }
-  .btn-block {
-    display: block;
-    width: 100%;
-    margin: 10px auto;
-    padding: 10px;
-    font-size: 1em;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-  }
-  #btnCambiarPass {
-    background: #ffc107;
-    color: #000;
-  }
-  #btnGuardarCambios {
-    background: #00C853;
-    color: white;
-  }
-  #backToDash {
-    background: #00C853;
-    color: white;
-  }
-  #mensajeGuardado {
-    text-align: center;
-    margin-top: 15px;
-    color: #4CAF50;
-    font-weight: bold;
-    display: none;
-  }
+  .profile-wrapper {
+  max-width: 1100px;
+  margin: 100px auto 40px; /* bajado un poco */
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  font-size: 1.1rem; /* fuente más grande */
+}
+
+.profile-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #eee;
+  padding-right: 30px;
+}
+
+.profile-avatar {
+  font-size: 120px;
+  color: #00C853;
+  margin-bottom: 15px;
+}
+
+.profile-left h2 {
+  margin: 10px 0 5px;
+  font-size: 1.8em;
+}
+
+.profile-stats {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.profile-stats p {
+  font-size: 1em;
+  color: #666;
+  margin: 6px 0;
+}
+
+.profile-right {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-field label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.profile-field input,
+.profile-field select {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1.05em;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.profile-actions button {
+  flex: 1;
+  padding: 14px;
+  font-size: 1.1em;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-guardar {
+  background-color: #00C853;
+}
+
+.btn-cambiar {
+  background-color: #0277bd;
+}
+
+
+
+ 
 
   #crearActividadContainer {
     width: 70%;
@@ -507,16 +528,97 @@
     font-size: 1em;
   }
 
+  #solicitudModeradorContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 420px;
+  z-index: 1000;
+}
+
+.solicitud-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 25px 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.solicitud-card h2 {
+  font-size: 1.6em;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.solicitud-card label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #222;
+}
+
+.solicitud-card input,
+.solicitud-card textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 0.95em;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.solicitud-card button {
+  width: 100%;
+  padding: 12px;
+  background-color: #00C853;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 10px;
+}
+
+
+
+
   </style>
 </head>
 <body>
   <!-- Sidebar (Menú lateral) -->
   <div class="sidebar" id="sidebar">
-    <a href="#" id="btnInicio"><i class="fas fa-home"></i> Inicio</a>
-    <a href="#" id="btnCalendario"><i class="fas fa-calendar-alt"></i> Mi calendario</a>
-    <a href="#" id="btnListaActividades"> <i class="fas fa-tasks"></i> Lista de actividades</a>
-    <a href="#"><i class="fas fa-question-circle"></i> ¿Te gustaría ser moderador del sitio?</a>
+
   </div>
+
+  <div id="solicitudModeradorContainer" class="view" style="display: none;">
+  <form id="formSolicitudModerador" class="solicitud-card">
+    <h2>Solicitud para ser Moderador</h2>
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" placeholder="Ej: 8888-8888" />
+
+    <label for="cedula">Cédula de Identidad:</label>
+    <input type="text" id="cedula" placeholder="Ej: 1-2345-6789" />
+
+    <label for="motivo">¿Por qué quieres ser moderador?</label>
+    <textarea id="motivo" rows="3" placeholder="Cuéntanos tu motivación..."></textarea>
+
+    <p id="errorSolicitud" style="color: red; display: none;"></p>
+
+    <button type="submit">Enviar Solicitud</button>
+  </form>
+</div>
+
+
+
+
+
   
   <!-- Contenido Principal del Dashboard -->
   <div class="main-content">
@@ -561,35 +663,46 @@
 
 
     <!-- Vista Perfil (Oculta inicialmente) -->
-    <div id="profileContainer" class="view">
-  <h1>Perfil de Usuario</h1>
-  <div class="profile-icon">
-    <i class="fas fa-user-circle"></i>
-  </div>
-  <p><strong>Nombre:</strong> Roymar Castillo</p>
-  <p><strong>Email:</strong> roymarcastillo@gmail.com</p>
+    <div id="profileContainer" class="view" style="display: none;">
+  <div class="profile-wrapper">
+    <div class="profile-left">
+      <i class="fas fa-user-circle profile-avatar"></i>
+      <h2 id="profileNombre">Juan Pérez</h2>
+      <p id="profileEmail">juan.perez@example.com</p>
 
-  <div class="field-group">
-    <div>
-      <label for="sexo">Sexo</label>
-      <select id="sexo">
-        <option selected disabled>Selecciona una opción</option>
-        <option value="femenino">Femenino</option>
-        <option value="masculino">Masculino</option>
-        <option value="otro">Otro</option>
-      </select>
+      <div class="profile-stats">
+        <p><strong>Inscrito en:</strong> 12 actividades</p>
+        <p><strong>Completadas:</strong> 7 actividades</p>
+        <p><strong>Última sesión:</strong> hace 2 días</p>
+      </div>
     </div>
-    <div>
-      <label for="fechaNacimiento">Fecha de nacimiento</label>
-      <input type="date" id="fechaNacimiento">
+
+    <div class="profile-right">
+      <div class="profile-field">
+        <label for="genero">Género:</label>
+        <select id="genero">
+          <option value="">No establecido</option>
+          <option>Masculino</option>
+          <option>Femenino</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="profile-field">
+        <label for="fecha">Fecha de nacimiento:</label>
+        <input type="date" id="fecha">
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn-guardar" id="btnGuardarCambios">Guardar cambios</button>
+        <button class="btn-cambiar" id="btnCambiarPass">Cambiar contraseña</button>
+      </div>
+      <p id="mensajeGuardado" style="display: none; color: green; font-weight: 600;">Cambios guardados correctamente.</p>
     </div>
   </div>
-
-  <button id="btnGuardarCambios" class="btn-block">Guardar cambios</button>
-  <div id="mensajeGuardado">¡Cambios guardados correctamente!</div>
-  <button id="btnCambiarPass" class="btn-block">Cambiar contraseña</button>
-  <button id="backToDash" class="btn-block">Volver al Dashboard</button>
 </div>
+
+
   <!-- Nueva Vista de Calendario con tema oscuro -->
 <!-- Vista de Calendario (Modal) -->
 <!-- Vista de Calendario Modal (agrupado por día) -->

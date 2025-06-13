@@ -1,98 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Iniciar Sesión</title>
+
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
     body {
-      background-color: #e28e20;
-      background-image: url('ruta/a/tu/imagen-de-fondo.jpg'); /* Opcional: añade una imagen de fondo */
+      background: linear-gradient(to right, #ffeb3b -20%, #ffd54f 50%, #ff9800 140%);
       background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }
+
     .card {
-      border-radius: 15px;
-      background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
-      color: white; /* Texto blanco para contrastar */
+      border-radius: 20px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
       border: none;
+      padding: 2rem;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
     }
+
+    .card h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-control {
+      background-color: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 1.1rem;
+      padding: 0.75rem;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-label {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
     .btn-primary {
       background-color: #80c827;
       border: none;
-      color: black; /* Texto negro para el botón verde */
+      font-size: 1.1rem;
       font-weight: bold;
+      color: black;
     }
+
+    .btn-primary:hover {
+      background-color: #6cb320;
+    }
+
+    .login-links {
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+
+    .login-links a {
+      color: #80c827;
+      text-decoration: none;
+    }
+
+    .login-links a:hover {
+      text-decoration: underline;
+    }
+
     .error-message {
       color: #ff6b6b;
       font-size: 0.9rem;
     }
-    .login-links {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .login-links a {
-      text-decoration: none;
-      color: #80c827; /* Mismo verde que el botón */
-    }
-    .login-links p {
+
+    .login-icon {
+      font-size: 4rem;
+      color: #80c827;
       margin-bottom: 0.5rem;
-    }
-    .form-control {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    .form-control::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-    .form-label {
-      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="container py-5">
+  <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="card shadow-lg">
-          <div class="card-body p-4">
-            <h1 class="text-center mb-4">Iniciar sesión</h1>
-            <p class="text-center mb-4">¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a></p>
-            
-            <form id="loginForm">
-              <!-- Correo -->
-              <div class="mb-3">
+      <div class="col-md-6 col-lg-5">
+        <div class="card text-center">
+          <div class="card-body">
+            <h1>Iniciar Sesión</h1>
+            <p>¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a></p>
+
+            <form id="loginForm" class="mt-4">
+              <div class="mb-3 text-start">
                 <label for="correo" class="form-label">Correo</label>
-                <input type="email" class="form-control" id="correo" required placeholder="ejemplo@limon.com">
+                <input type="email" id="correo" class="form-control" placeholder="ejemplo@correo.com" required />
                 <div id="errorCorreo" class="error-message"></div>
               </div>
-              
-              <!-- Contraseña -->
-              <div class="mb-3">
+
+              <div class="mb-3 text-start">
                 <label for="contraseña" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="contraseña" required>
+                <input type="password" id="contraseña" class="form-control" placeholder="Tu contraseña" required />
                 <div id="errorPass" class="error-message"></div>
               </div>
-              
-              <!-- Botón -->
-              <button type="submit" class="btn btn-primary w-100 mb-3">Ingresar</button>
-              
-              <!-- Enlaces -->
+
+              <button type="submit" class="btn btn-primary w-100 mt-2">Ingresar</button>
               <div class="login-links">
                 <p><a href="recuperar-pass.html">¿Olvidaste tu contraseña?</a></p>
               </div>
             </form>
+
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS + tu script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Nuestro JavaScript -->
   <script src="js/login.js"></script>
 </body>
 </html>

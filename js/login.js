@@ -1,6 +1,6 @@
 document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  
+
   // Obtener valores
   const correo = document.getElementById("correo").value.trim();
   const contraseña = document.getElementById("contraseña").value;
@@ -31,8 +31,9 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
   if (isValid) {
     // Usuarios de prueba (simulados)
     const usuarios = [
-      { correo: "davidcg2508@gmail.com", contraseña: "Dcg250808"},
-      { correo: "roymarcastillo@gmail.com", contraseña: "racc1210"}
+      { correo: "davidcg2508@gmail.com", contraseña: "abc123", rol: "user" },
+      { correo: "roymarcastillo@gmail.com", contraseña: "abc123", rol: "moderator" },
+      { correo: "admin@gmail.com", contraseña: "abc123", rol: "admin" }
     ];
 
     // Buscar coincidencia
@@ -41,6 +42,7 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     if (usuario) {
       // Guardar en localStorage (simula sesión)
       localStorage.setItem("usuarioActual", JSON.stringify(usuario));
+      localStorage.setItem("userRole", usuario.rol);
       alert("¡Inicio de sesión exitoso!");
       window.location.href = "dashboard.html"; // Redirigir al dashboard
     } else {
