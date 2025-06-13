@@ -1087,8 +1087,9 @@ function rechazarActividad(actividadId, motivo) {
 }
 
 
-  let map;
-  let marker;
+let map;
+let marker;
+
   function initMap() {
     map = L.map('map').setView([9.7489, -83.7534], 8);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
