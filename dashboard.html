@@ -424,49 +424,224 @@
     /* Vista Calendario con Tema Oscuro */
 /* Vista Calendario (Modal centrado) */
 /* Estilos para el calendario modal, agrupado por días */
-#calendarContainer {
-  position: fixed;             
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 640px;
-  background: #1a1a1a;         /* Fondo oscuro */
+.calendar-wrapper {
+  width: 90%;
+  max-width: 1000px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #fff;
   border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  z-index: 2000;               /* Encima de otros elementos */
-  display: none;               /* Oculto por defecto */
-  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
-#calendarContainer h1 {
+
+.calendar-header {
   text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.calendar-header h2 {
   color: #00C853;
-  margin-bottom: 20px;
+  margin: 0 0 10px 0;
+  font-size: 2em;
 }
-.day-group {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 10px;
+
+.calendar-header i {
+  color: #00C853;
+  margin-right: 10px;
 }
-.day-group h2 {
+
+.calendar-subtitle {
+  color: #666;
   margin: 0;
-  padding: 5px 0;
-  color: #00C853;
-  font-size: 1.2em;
-}
-.event {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
-  font-size: 0.95em;
-}
-.event-title {
-  font-weight: bold;
-}
-.event-time {
   font-style: italic;
 }
+
+.calendar-day-group {
+  margin-bottom: 25px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.calendar-date-header {
+  background: linear-gradient(45deg, #00C853, #4CAF50);
+  color: white;
+  margin: 0;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.calendar-date-header i {
+  margin-right: 10px;
+}
+
+.calendar-activity-card {
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+  padding: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.calendar-activity-card:last-child {
+  border-bottom: none;
+}
+
+.calendar-activity-card:hover {
+  background: #f0f8ff;
+}
+
+.calendar-activity-card.estado-pendiente {
+  border-left: 4px solid #ff9800;
+}
+
+.calendar-activity-card.estado-confirmado {
+  border-left: 4px solid #00C853;
+}
+
+.calendar-activity-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calendar-activity-main h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.3em;
+}
+
+.calendar-activity-main h4 i {
+  color: #00C853;
+  margin-right: 8px;
+}
+
+.calendar-activity-details {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.calendar-time,
+.calendar-location {
+  color: #666;
+  font-size: 0.95em;
+}
+
+.calendar-time i,
+.calendar-location i {
+  color: #00C853;
+  margin-right: 5px;
+}
+
+.calendar-status {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-confirmado {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.status-pendiente {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.calendar-activity-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-ver-detalle-calendario {
+  background: linear-gradient(45deg, #2196F3, #21CBF3);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: transform 0.2s ease;
+}
+
+.btn-desinscribir-calendario {
+  background: linear-gradient(45deg, #f44336, #e53935);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: transform 0.2s ease;
+}
+
+.btn-ver-detalle-calendario:hover,
+.btn-desinscribir-calendario:hover {
+  transform: scale(1.05);
+}
+
+.calendar-detail-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-desinscribirse-detail {
+  background: linear-gradient(45deg, #f44336, #e53935);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: transform 0.2s ease;
+}
+
+.btn-desinscribirse-detail:hover {
+  transform: scale(1.05);
+}
+
+#calendarioActividadMapa {
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+  .calendar-activity-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .calendar-activity-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .calendar-activity-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .detalle-content {
+    grid-template-columns: 1fr;
+  }
+}
+
 #listaActividadesContainer {
     width: 80%;
     max-width: 900px;
@@ -585,7 +760,797 @@
   margin-top: 10px;
 }
 
+/* Estilos para Moderación de Actividades */
+.moderacion-wrapper {
+  width: 90%;
+  max-width: 1000px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
 
+.moderacion-wrapper h2 {
+  color: #00C853;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.moderacion-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.actividad-pendiente-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.actividad-pendiente-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.actividad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 10px;
+}
+
+.actividad-header h3 {
+  margin: 0;
+  color: #00C853;
+  font-size: 1.3em;
+}
+
+.fecha-solicitud {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.actividad-info p {
+  margin: 8px 0;
+  color: #333;
+}
+
+.actividad-acciones {
+  text-align: right;
+  margin-top: 15px;
+}
+
+.btn-revisar {
+  background: linear-gradient(45deg, #00C853, #4CAF50);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.btn-revisar:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para Detalle de Moderación */
+.detalle-moderacion-wrapper {
+  width: 90%;
+  max-width: 1000px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.detalle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.detalle-header h2 {
+  color: #00C853;
+  margin: 0;
+  font-size: 1.8em;
+}
+
+.btn-volver {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.detalle-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.info-group {
+  margin-bottom: 15px;
+}
+
+.info-group label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.info-group label i {
+  color: #00C853;
+  margin-right: 8px;
+  width: 16px;
+}
+
+.info-group span,
+.info-group p {
+  color: #555;
+  margin: 0;
+}
+
+.detalle-mapa h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.detalle-mapa h3 i {
+  color: #00C853;
+  margin-right: 8px;
+}
+
+#moderacionMapa {
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.moderacion-acciones {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.btn-aceptar {
+  background: linear-gradient(45deg, #00C853, #4CAF50);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: transform 0.2s ease;
+}
+
+.btn-rechazar {
+  background: linear-gradient(45deg, #f44336, #e53935);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: transform 0.2s ease;
+}
+
+.btn-aceptar:hover,
+.btn-rechazar:hover {
+  transform: scale(1.05);
+}
+
+.formulario-rechazo {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.formulario-rechazo h3 {
+  color: #e65100;
+  margin-bottom: 15px;
+}
+
+.formulario-rechazo textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.rechazo-acciones {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.btn-enviar-rechazo {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-cancelar-rechazo {
+  background: #757575;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.solicitud-moderador-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solicitud-moderador-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.solicitud-moderador-card .solicitud-info p {
+  margin: 8px 0;
+  color: #333;
+}
+
+.solicitud-moderador-card .solicitud-info i {
+  color: #00C853;
+  margin-right: 8px;
+  width: 16px;
+}
+
+.btn-revisar-solicitud {
+  background: linear-gradient(45deg, #2196F3, #21CBF3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.btn-revisar-solicitud:hover {
+  transform: scale(1.05);
+}
+
+.busqueda-container {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.busqueda-input {
+  width: 100%;
+  padding: 15px 20px 15px 50px;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  font-size: 1.1em;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.busqueda-input:focus {
+  outline: none;
+  border-color: #00C853;
+}
+
+.busqueda-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1.2em;
+}
+
+.usuario-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.usuario-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.usuario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.usuario-info h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 1.3em;
+}
+
+.usuario-info i {
+  color: #00C853;
+  margin-right: 8px;
+}
+
+.usuario-email {
+  color: #666;
+  font-style: italic;
+}
+
+.usuario-rol {
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.rol-user {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.rol-moderator {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.rol-admin {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.usuario-detalles {
+  margin-bottom: 15px;
+}
+
+.usuario-detalles p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.usuario-detalles i {
+  color: #00C853;
+  margin-right: 8px;
+  width: 16px;
+}
+
+.usuario-acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-modificar-usuario {
+  background: linear-gradient(45deg, #2196F3, #21CBF3);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.btn-eliminar-usuario {
+  background: linear-gradient(45deg, #f44336, #e53935);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.btn-modificar-usuario:hover,
+.btn-eliminar-usuario:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para Modales */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.modal-content h3 i {
+  color: #00C853;
+  margin-right: 10px;
+}
+
+.modal-warning h3 i {
+  color: #f44336;
+}
+
+.modal-info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.modal-info p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.modal-field {
+  margin: 20px 0;
+}
+
+.modal-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.modal-acciones {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.btn-modal-confirmar {
+  background: #00C853;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-modal-eliminar {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-modal-cancelar {
+  background: #757575;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.warning-message {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 15px;
+  color: #856404;
+  margin: 15px 0;
+}
+
+.warning-message i {
+  color: #f39c12;
+  margin-right: 8px;
+}
+
+.filtros-container {
+  margin-bottom: 30px;
+}
+
+.filtros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.filtro-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filtro-group label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.filtro-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.filtro-select:focus {
+  outline: none;
+  border-color: #00C853;
+}
+
+.actividad-admin-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.actividad-admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.actividad-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.actividad-admin-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.actividad-admin-info h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.3em;
+}
+
+.actividad-admin-info i {
+  color: #00C853;
+  margin-right: 8px;
+}
+
+.actividad-categoria {
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.categoria-deportiva {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.categoria-recreativa {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.categoria-cultural {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.categoria-educativa {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.actividad-estado {
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9em;
+  text-transform: uppercase;
+}
+
+.estado-aceptada {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.estado-en-evaluación {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.estado-rechazada {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.actividad-admin-detalles {
+  margin-bottom: 15px;
+}
+
+.actividad-admin-detalles p {
+  margin: 8px 0;
+  color: #555;
+}
+
+.actividad-admin-detalles i {
+  color: #00C853;
+  margin-right: 8px;
+  width: 16px;
+}
+
+.actividad-admin-acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-ver-actividad {
+  background: linear-gradient(45deg, #2196F3, #21CBF3);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.btn-eliminar-actividad {
+  background: linear-gradient(45deg, #f44336, #e53935);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+.btn-ver-actividad:hover,
+.btn-eliminar-actividad:hover {
+  transform: scale(1.05);
+}
+
+#adminActividadMapa {
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+  .filtros-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .actividad-admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .actividad-admin-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .actividad-admin-acciones {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .usuario-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .usuario-acciones {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .modal-acciones {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .detalle-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .moderacion-acciones {
+    flex-direction: column;
+  }
+  
+  .actividad-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
 
 
   </style>
@@ -740,43 +1705,403 @@
   <button id="btnVolverLista">Volver a la Lista</button>
 </div>
 
-<div id="calendarContainer" class="view">
-  <h1>Mi Calendario</h1>
-  <!-- Día 1 -->
-  <div class="day-group">
-    <h2>Mie, 3 may</h2>
-    <div class="event">
-      <span class="event-title">Punto de control #1</span>
-      <span class="event-time">8:00 AM - 8:30 AM</span>
+
+<div id="calendarContainer" class="view" style="display: none;">
+  <div class="calendar-wrapper">
+    <div class="calendar-header">
+      <h2><i class="fas fa-calendar-alt"></i> Mi Calendario de Actividades</h2>
+      <p class="calendar-subtitle">Aquí puedes ver todas las actividades en las que estás inscrito</p>
     </div>
+    <div id="calendarioActividades"></div>
   </div>
-  <!-- Día 2 -->
-  <div class="day-group">
-    <h2>Mie, 10 may</h2>
-    <div class="event">
-      <span class="event-title">Punto de control #2</span>
-      <span class="event-time">8:00 AM - 8:30 AM</span>
+</div>
+
+<!-- Vista de Detalle de Actividad desde Calendario -->
+<div id="detalleActividadCalendarioContainer" class="view" style="display: none;">
+  <div class="detalle-moderacion-wrapper">
+    <div class="detalle-header">
+      <h2><i class="fas fa-info-circle"></i> <span id="calActTitulo"></span></h2>
+      <button id="btnVolverCalendario" class="btn-volver">
+        <i class="fas fa-arrow-left"></i> Volver al Calendario
+      </button>
     </div>
-  </div>
-  <!-- Día 3 -->
-  <div class="day-group">
-    <h2>Jue, 12 may</h2>
-    <div class="event">
-      <span class="event-title">Examen #3</span>
-      <span class="event-time">7:30 AM - 9:20 AM</span>
+    
+    <div class="detalle-content">
+      <div class="detalle-info">
+        <div class="info-group">
+          <label><i class="fas fa-calendar"></i> Fecha:</label>
+          <span id="calActFecha"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-clock"></i> Hora:</label>
+          <span id="calActHora"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-map-marker-alt"></i> Ubicación:</label>
+          <span id="calActUbicacion"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-check-circle"></i> Estado:</label>
+          <span id="calActEstado"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-align-left"></i> Descripción:</label>
+          <p id="calActDescripcion"></p>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-users"></i> Límite de participantes:</label>
+          <span id="calActLimite"></span>
+        </div>
+      </div>
+      
+      <div class="detalle-mapa">
+        <h3><i class="fas fa-map-marker-alt"></i> Ubicación en el Mapa</h3>
+        <div id="calendarioActividadMapa"></div>
+      </div>
     </div>
-  </div>
-  <!-- Día 4 -->
-  <div class="day-group">
-    <h2>Mie, 17 may</h2>
-    <div class="event">
-      <span class="event-title">Entrega del proyecto 3</span>
-      <span class="event-time">7:30 AM - 9:20 AM</span>
+    
+    <div class="calendar-detail-actions">
+      <button id="btnDesinscribirseDetalle" class="btn-desinscribirse-detail">
+        <i class="fas fa-sign-out-alt"></i> Desinscribirme de esta Actividad
+      </button>
     </div>
   </div>
 </div>
 
+<!-- Modal para Confirmar Desinscripción -->
+<div id="modalDesinscripcion" class="modal-overlay" style="display: none;">
+  <div class="modal-content modal-warning">
+    <h3><i class="fas fa-exclamation-circle"></i> Confirmar Desinscripción</h3>
+    <div class="modal-warning-text">
+      <p><strong>¿Estás seguro de que deseas desinscribirte de esta actividad?</strong></p>
+      <div class="modal-info">
+        <p><strong>Actividad:</strong> <span id="desinscripcionActividadTitulo"></span></p>
+        <p><strong>Fecha y hora:</strong> <span id="desinscripcionActividadFecha"></span></p>
+        <p><strong>Ubicación:</strong> <span id="desinscripcionActividadUbicacion"></span></p>
+      </div>
+      <p class="warning-message">
+        <i class="fas fa-info-circle"></i> 
+        Una vez que te desinscribas, perderás tu lugar en esta actividad. Podrías no poder volver a inscribirte si se alcanza el límite de participantes.
+      </p>
+    </div>
+    <div class="modal-acciones">
+      <button id="btnConfirmarDesinscripcion" class="btn-modal-eliminar">
+        <i class="fas fa-sign-out-alt"></i> Sí, Desinscribirme
+      </button>
+      <button id="btnCancelarDesinscripcion" class="btn-modal-cancelar">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+  </div>
+</div>
 
+<!-- Vista de Detalle de Moderación -->
+<div id="detalleModeracionContainer" class="view" style="display: none;">
+  <div class="detalle-moderacion-wrapper">
+    <div class="detalle-header">
+      <h2 id="modTitulo"></h2>
+      <button id="btnVolverModeracion" class="btn-volver">
+        <i class="fas fa-arrow-left"></i> Volver
+      </button>
+    </div>
+    
+    <div class="detalle-content">
+      <div class="detalle-info">
+        <div class="info-group">
+          <label><i class="fas fa-user"></i> Solicitante:</label>
+          <span id="modSolicitante"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-calendar"></i> Fecha de solicitud:</label>
+          <span id="modFecha"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-users"></i> Límite de participantes:</label>
+          <span id="modLimite"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-align-left"></i> Descripción:</label>
+          <p id="modDescripcion"></p>
+        </div>
+      </div>
+      
+      <div class="detalle-mapa">
+        <h3><i class="fas fa-map-marker-alt"></i> Ubicación</h3>
+        <div id="moderacionMapa"></div>
+      </div>
+    </div>
+    
+    <div class="moderacion-acciones">
+      <button id="btnAceptarActividad" class="btn-aceptar">
+        <i class="fas fa-check"></i> Aceptar
+      </button>
+      <button id="btnRechazarActividad" class="btn-rechazar">
+        <i class="fas fa-times"></i> Rechazar
+      </button>
+    </div>
+    
+    <!-- Formulario de rechazo (oculto inicialmente) -->
+    <div id="formularioRechazo" class="formulario-rechazo" style="display: none;">
+      <h3>Motivo del rechazo</h3>
+      <textarea id="motivoRechazo" placeholder="Explica detalladamente por qué se rechaza esta actividad..." rows="4"></textarea>
+      <div class="rechazo-acciones">
+        <button id="btnEnviarRechazo" class="btn-enviar-rechazo">Enviar rechazo</button>
+        <button id="btnCancelarRechazo" class="btn-cancelar-rechazo">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="revisarSolicitudesContainer" class="view" style="display: none;">
+  <div class="moderacion-wrapper">
+    <h2><i class="fas fa-user-check"></i> Solicitudes de Moderador</h2>
+    <p class="moderacion-subtitle">Revisa y aprueba las solicitudes para ser moderador</p>
+    <div id="solicitudesModerador"></div>
+  </div>
+</div>
+
+<!-- Vista de Detalle de Solicitud de Moderador -->
+<div id="detalleSolicitudContainer" class="view" style="display: none;">
+  <div class="detalle-moderacion-wrapper">
+    <div class="detalle-header">
+      <h2><i class="fas fa-user-plus"></i> Detalle de Solicitud</h2>
+      <button id="btnVolverSolicitudes" class="btn-volver">
+        <i class="fas fa-arrow-left"></i> Volver
+      </button>
+    </div>
+    
+    <div class="detalle-content" style="grid-template-columns: 1fr;">
+      <div class="detalle-info">
+        <div class="info-group">
+          <label><i class="fas fa-user"></i> Nombre completo:</label>
+          <span id="solNombre"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-envelope"></i> Email:</label>
+          <span id="solEmail"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-phone"></i> Teléfono:</label>
+          <span id="solTelefono"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-id-card"></i> Cédula:</label>
+          <span id="solCedula"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-calendar"></i> Fecha de solicitud:</label>
+          <span id="solFecha"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-comment"></i> Motivo:</label>
+          <p id="solMotivo"></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="moderacion-acciones">
+      <button id="btnAceptarSolicitud" class="btn-aceptar">
+        <i class="fas fa-check"></i> Aprobar como Moderador
+      </button>
+      <button id="btnRechazarSolicitud" class="btn-rechazar">
+        <i class="fas fa-times"></i> Rechazar Solicitud
+      </button>
+    </div>
+    
+    <!-- Formulario de rechazo para solicitudes -->
+    <div id="formularioRechazoSolicitud" class="formulario-rechazo" style="display: none;">
+      <h3>Motivo del rechazo</h3>
+      <textarea id="motivoRechazoSolicitud" placeholder="Explica por qué se rechaza esta solicitud de moderador..." rows="4"></textarea>
+      <div class="rechazo-acciones">
+        <button id="btnEnviarRechazoSolicitud" class="btn-enviar-rechazo">Enviar rechazo</button>
+        <button id="btnCancelarRechazoSolicitud" class="btn-cancelar-rechazo">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="gestionUsuariosContainer" class="view" style="display: none;">
+  <div class="moderacion-wrapper">
+    <h2><i class="fas fa-user-shield"></i> Gestión de Usuarios</h2>
+    <p class="moderacion-subtitle">Administra los usuarios del sistema</p>
+    
+    <!-- Campo de búsqueda -->
+    <div class="busqueda-container">
+      <input type="text" id="busquedaUsuarios" placeholder="Buscar por nombre, correo o rol..." class="busqueda-input">
+      <i class="fas fa-search busqueda-icon"></i>
+    </div>
+    
+    <div id="usuariosLista"></div>
+  </div>
+</div>
+
+<!-- Modal para Modificar Usuario -->
+<div id="modalModificarUsuario" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h3><i class="fas fa-edit"></i> Modificar Usuario</h3>
+    <div class="modal-info">
+      <p><strong>Nombre:</strong> <span id="modificarUsuarioNombre"></span></p>
+      <p><strong>Email:</strong> <span id="modificarUsuarioEmail"></span></p>
+    </div>
+    <div class="modal-field">
+      <label for="nuevoRolUsuario">Nuevo Rol:</label>
+      <select id="nuevoRolUsuario" class="modal-select">
+        <option value="user">Usuario</option>
+        <option value="moderator">Moderador</option>
+        <option value="admin">Administrador</option>
+      </select>
+    </div>
+    <div class="modal-acciones">
+      <button id="btnConfirmarModificacion" class="btn-modal-confirmar">
+        <i class="fas fa-check"></i> Confirmar Cambios
+      </button>
+      <button id="btnCancelarModificacion" class="btn-modal-cancelar">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Eliminar Usuario -->
+<div id="modalEliminarUsuario" class="modal-overlay" style="display: none;">
+  <div class="modal-content modal-warning">
+    <h3><i class="fas fa-exclamation-triangle"></i> Eliminar Usuario</h3>
+    <div class="modal-warning-text">
+      <p><strong>¿Estás seguro de que deseas eliminar este usuario?</strong></p>
+      <div class="modal-info">
+        <p><strong>Nombre:</strong> <span id="eliminarUsuarioNombre"></span></p>
+        <p><strong>Email:</strong> <span id="eliminarUsuarioEmail"></span></p>
+      </div>
+      <p class="warning-message">
+        <i class="fas fa-warning"></i> 
+        Esta acción es permanente. Se perderá toda la información asociada al usuario, incluyendo sus actividades inscritas e historial.
+      </p>
+    </div>
+    <div class="modal-acciones">
+      <button id="btnConfirmarEliminacion" class="btn-modal-eliminar">
+        <i class="fas fa-trash"></i> Sí, Eliminar Usuario
+      </button>
+      <button id="btnCancelarEliminacion" class="btn-modal-cancelar">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+<div id="gestionActividadesAdminContainer" class="view" style="display: none;">
+  <div class="moderacion-wrapper">
+    <h2><i class="fas fa-tasks"></i> Gestión de Actividades</h2>
+    <p class="moderacion-subtitle">Administra todas las actividades del sistema</p>
+    
+    <!-- Filtros y búsqueda -->
+    <div class="filtros-container">
+      <!-- Búsqueda por texto -->
+      <div class="busqueda-container">
+        <input type="text" id="busquedaActividades" placeholder="Buscar por título o descripción..." class="busqueda-input">
+        <i class="fas fa-search busqueda-icon"></i>
+      </div>
+      
+      <!-- Filtros -->
+      <div class="filtros-grid">
+        <div class="filtro-group">
+          <label for="filtroCategoria">Categoría:</label>
+          <select id="filtroCategoria" class="filtro-select">
+            <option value="">Todas las categorías</option>
+            <option value="deportiva">Deportiva</option>
+            <option value="recreativa">Recreativa</option>
+            <option value="cultural">Cultural</option>
+            <option value="educativa">Educativa</option>
+          </select>
+        </div>
+        
+        <div class="filtro-group">
+          <label for="filtroEstado">Estado:</label>
+          <select id="filtroEstado" class="filtro-select">
+            <option value="">Todos los estados</option>
+            <option value="Aceptada">Aceptada</option>
+            <option value="En Evaluación">En Evaluación</option>
+            <option value="Rechazada">Rechazada</option>
+          </select>
+        </div>
+        
+        <div class="filtro-group">
+          <label for="filtroFecha">Fecha:</label>
+          <input type="date" id="filtroFecha" class="filtro-select">
+        </div>
+        
+        <div class="filtro-group">
+          <label for="filtroUbicacion">Ubicación:</label>
+          <input type="text" id="filtroUbicacion" placeholder="Buscar ubicación..." class="filtro-select">
+        </div>
+      </div>
+    </div>
+    
+    <div id="actividadesAdminLista"></div>
+  </div>
+</div>
+
+<!-- Vista de Detalle de Actividad (Admin) -->
+<div id="detalleActividadAdminContainer" class="view" style="display: none;">
+  <div class="detalle-moderacion-wrapper">
+    <div class="detalle-header">
+      <h2><i class="fas fa-calendar-alt"></i> <span id="adminActTitulo"></span></h2>
+      <button id="btnVolverGestionActividades" class="btn-volver">
+        <i class="fas fa-arrow-left"></i> Volver
+      </button>
+    </div>
+    
+    <div class="detalle-content">
+      <div class="detalle-info">
+        <div class="info-group">
+          <label><i class="fas fa-align-left"></i> Descripción:</label>
+          <p id="adminActDescripcion"></p>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-users"></i> Límite de participantes:</label>
+          <span id="adminActLimite"></span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-calendar"></i> Fecha:</label>
+          <span id="adminActFecha"></span>
+        </div>
+        <div class="info-group" id="solicitanteGroup">
+          <label><i class="fas fa-user"></i> Solicitante:</label>
+          <span id="adminActSolicitante"></span>
+        </div>
+      </div>
+      
+      <div class="detalle-mapa">
+        <h3><i class="fas fa-map-marker-alt"></i> Ubicación</h3>
+        <div id="adminActividadMapa"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Eliminar Actividad -->
+<div id="modalEliminarActividad" class="modal-overlay" style="display: none;">
+  <div class="modal-content modal-warning">
+    <h3><i class="fas fa-exclamation-triangle"></i> Eliminar Actividad</h3>
+    <div class="modal-warning-text">
+      <p><strong>¿Estás seguro de que deseas eliminar esta actividad?</strong></p>
+      <div class="modal-info">
+        <p><strong>Título:</strong> <span id="eliminarActividadTitulo"></span></p>
+        <p><strong>Descripción:</strong> <span id="eliminarActividadDescripcion"></span></p>
+        <p><strong>Inscripciones:</strong> <span id="eliminarActividadInscritos"></span></p>
+      </div>
+      <p class="warning-message">
+        <i class="fas fa-warning"></i> 
+        Esta acción es permanente. Se eliminará la actividad y todas las inscripciones asociadas.
+      </p>
+    </div>
+    <div class="modal-acciones">
+      <button id="btnConfirmarEliminacionActividad" class="btn-modal-eliminar">
+        <i class="fas fa-trash"></i> Sí, Eliminar Actividad
+      </button>
+      <button id="btnCancelarEliminacionActividad" class="btn-modal-cancelar">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+    </div>
+  </div>
+</div>
 
   <!-- Vinculamos el archivo JavaScript externo -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
