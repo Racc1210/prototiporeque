@@ -2,35 +2,40 @@ document.addEventListener('DOMContentLoaded', () => {
   construirMenuLateral();
   initCarousel();
   
-  let actividades = [
-  {
-    id: 1,
-    titulo: 'Entrenamiento Matutino',
-    descripcion: 'Sesión de ejercicio al aire libre en el parque central.',
-    limite: 10,
-    ubicacion: { lat: 9.998, lng: -83.753 }
-  },
-  {
-    id: 2,
-    titulo: 'Clase de Yoga',
-    descripcion: 'Clase de yoga para mejorar la flexibilidad y la concentración.',
-    limite: 15,
-    ubicacion: { lat: 9.7489, lng: -83.7534 }
-  },
-  {
-    id: 3,
-    titulo: 'Competencia de Ciclismo',
-    descripcion: 'Carrera de bicicletas para poner a prueba tu resistencia.',
-    limite: 20,
-    ubicacion: { lat: 9.900, lng: -84.000 }
-  }
-];
-  let map, marker;
-  let detalleMap, detalleMarker;
-  let inscritosPorActividad = new Map();
+  window.actividades = [
+    {
+      id: 1,
+      titulo: 'Entrenamiento Matutino',
+      descripcion: 'Sesión de ejercicio al aire libre en el parque central.',
+      limite: 10,
+      ubicacion: { lat: 9.998, lng: -83.753 },
+      fecha: '2025-06-12',
+      hora: '08:00 AM - 09:00 AM'
+    },
+    {
+      id: 2,
+      titulo: 'Clase de Yoga',
+      descripcion: 'Clase de yoga para mejorar la flexibilidad y la concentración.',
+      limite: 15,
+      ubicacion: { lat: 9.7489, lng: -83.7534 },
+      fecha: '2025-06-12',
+      hora: '10:00 AM - 11:00 AM'
+    },
+    {
+      id: 3,
+      titulo: 'Competencia de Ciclismo',
+      descripcion: 'Carrera de bicicletas para poner a prueba tu resistencia.',
+      limite: 20,
+      ubicacion: { lat: 9.9, lng: -84.000 },
+      fecha: '2025-06-20',
+      hora: '07:30 AM - 09:20 AM'
+    }
+  ];
 
-  actividades.forEach((act) => {
-  inscritosPorActividad.set(act.id, 0);
+  // Variable para controlar inscritos por actividad.
+  let inscritosPorActividad = new Map();
+  actividades.forEach(activity => {
+    inscritosPorActividad.set(activity.id, 0);
   });
 
   const btnGenerarActividad = document.getElementById('generateActivity');
@@ -39,24 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const listaActividadesContainer = document.getElementById('listaActividadesContainer');
   const listaActividades = document.getElementById('listaActividades');
   const filtroBusqueda = document.getElementById('filtroBusqueda');
-  const btnListaActividades = document.getElementById('btnListaActividades');
 
-  const contenedorDetalle = document.getElementById('actividadDetalleContainer');
-  const tituloDetalle = document.getElementById('detalleTitulo');
-  const descripcionDetalle = document.getElementById('detalleDescripcion');
-  const inscritosDetalle = document.getElementById('detalleInscritos');
-  const btnInscribirse = document.getElementById('btnInscribirse');
-  const btnVolverLista = document.getElementById('btnVolverLista');
+  document.getElementById('filtroBusqueda').addEventListener('input', renderUserListaActividades);
+  document.getElementById('filtroCategoria').addEventListener('change', renderUserListaActividades);
+  document.getElementById('filtroEstado').addEventListener('change', renderUserListaActividades);
+  document.getElementById('filtroFecha').addEventListener('change', renderUserListaActividades);
+  document.getElementById('filtroUbicacion').addEventListener('input', renderUserListaActividades);
+
 
   let actividadesInscritas = [
-  {
-    id: 1,
-    titulo: 'Entrenamiento Matutino',
-    fecha: '2025-06-15',
-    hora: '06:00',
-    ubicacion: 'Parque Central',
-    estado: 'confirmado'
-  },
   {
     id: 2,
     titulo: 'Clase de Yoga',
@@ -229,34 +225,7 @@ window.confirmarDesinscripcion = function(actividadId) {
   };
 };
 
-function procesarDesinscripcion(actividadId) {
-  const actividad = actividadesInscritas.find(act => act.id === actividadId);
-  
-  if (actividad) {
-    // Remover de actividades inscritas
-    actividadesInscritas = actividadesInscritas.filter(act => act.id !== actividadId);
-    
-    // Decrementar contador de inscritos si existe
-    if (inscritosPorActividad.has(actividadId)) {
-      const inscritosActuales = inscritosPorActividad.get(actividadId);
-      inscritosPorActividad.set(actividadId, Math.max(0, inscritosActuales - 1));
-    }
-    
-    alert(`Te has desinscrito exitosamente de "${actividad.titulo}".`);
-    
-    document.getElementById('modalDesinscripcion').style.display = 'none';
-    
-    // Actualizar vista actual
-    const currentView = document.querySelector('.view[style*="block"]');
-    if (currentView && currentView.id === 'calendarContainer') {
-      renderCalendarioActividades();
-    } else if (currentView && currentView.id === 'detalleActividadCalendarioContainer') {
-      hideAllViews();
-      document.getElementById('calendarContainer').style.display = 'block';
-      renderCalendarioActividades();
-    }
-  }
-}
+
 
   let usuarios = [
   {
@@ -402,6 +371,80 @@ function getCategoriaLabel(categoria) {
   };
   return categorias[categoria] || categoria;
 }
+
+function renderUserListaActividades() {
+  const busqueda = document.getElementById('filtroBusqueda').value.toLowerCase();
+  const categoria = document.getElementById('filtroCategoria').value;
+  const estado = document.getElementById('filtroEstado').value;
+  const fecha = document.getElementById('filtroFecha').value;
+  const ubicacion = document.getElementById('filtroUbicacion').value.toLowerCase();
+
+  const listaActividades = document.getElementById('listaActividades');
+  listaActividades.innerHTML = '';
+
+  // Filtrar actividades con base en los filtros
+  const actividadesFiltradas = window.actividades.filter(act => {
+    const matchBusqueda = act.titulo.toLowerCase().includes(busqueda) ||
+                          act.descripcion.toLowerCase().includes(busqueda);
+    const matchCategoria = categoria === "" || (act.categoria && act.categoria === categoria);
+    const matchEstado = estado === "" || (act.estado && act.estado === estado);
+    const matchFecha = fecha === "" || act.fecha === fecha;
+    const actUbicacion = act.ubicacion ? `${act.ubicacion.lat},${act.ubicacion.lng}` : "";
+    const matchUbicacion = ubicacion === "" || actUbicacion.toLowerCase().includes(ubicacion);
+    return matchBusqueda && matchCategoria && matchEstado && matchFecha && matchUbicacion;
+  });
+
+  if (actividadesFiltradas.length === 0) {
+    listaActividades.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">No se encontraron actividades</p>';
+    return;
+  }
+
+  actividadesFiltradas.forEach(act => {
+    const card = document.createElement('div');
+    card.className = 'user-activity-card';
+
+    card.innerHTML = `
+      <div class="detalle-content" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+        <div class="detalle-info">
+          <div class="info-group">
+            <label><i class="fas fa-calendar"></i> Fecha:</label>
+            <span>${act.fecha || '-'}</span>
+          </div>
+          <div class="info-group">
+            <label><i class="fas fa-clock"></i> Hora:</label>
+            <span>${act.hora || '-'}</span>
+          </div>
+          <div class="info-group">
+            <label><i class="fas fa-map-marker-alt"></i> Ubicación:</label>
+            <span>${act.ubicacion ? `${act.ubicacion.lat.toFixed(4)}, ${act.ubicacion.lng.toFixed(4)}` : '-'}</span>
+          </div>
+          <div class="info-group">
+            <label><i class="fas fa-align-left"></i> Descripción:</label>
+            <p>${act.descripcion}</p>
+          </div>
+          <div class="info-group">
+            <label><i class="fas fa-users"></i> Límite de participantes:</label>
+            <span>${act.limite || '-'}</span>
+          </div>
+        </div>
+        <div class="user-activity-actions" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+          <button class="btn-ver-detalle">
+            <i class="fas fa-eye"></i> Ver Detalle
+          </button>
+        </div>
+      </div>
+    `;
+
+    card.querySelector('.btn-ver-detalle').addEventListener('click', function(e) {
+      e.stopPropagation();
+      mostrarDetalleActividad(act.id);
+    });
+
+    listaActividades.appendChild(card);
+  });
+}
+
+
 
 // Función global para mostrar detalle de actividad (admin)
 window.mostrarDetalleActividadAdmin = function(actividadId) {
@@ -915,6 +958,8 @@ function aceptarActividad(actividadId) {
   }
 }
 
+
+
 function mostrarFormularioRechazo(actividadId) {
   document.getElementById('formularioRechazo').style.display = 'block';
   document.getElementById('motivoRechazo').value = '';
@@ -998,7 +1043,7 @@ function rechazarActividad(actividadId, motivo) {
     e.preventDefault();
     hideAllViews();
     document.getElementById('listaActividadesContainer').style.display = 'block';
-    renderListaActividades();
+    renderUserListaActividades();
     document.getElementById('sidebar').classList.remove('show');
   });
 
@@ -1062,11 +1107,7 @@ function rechazarActividad(actividadId, motivo) {
     initMap();
   });
 
-  btnVolverLista?.addEventListener('click', () => {
-    hideAllViews();
-    listaActividadesContainer.style.display = 'block';
-    renderListaActividades();
-  });
+
 
 
   formActividad?.addEventListener('submit', (e) => {
@@ -1096,51 +1137,141 @@ function rechazarActividad(actividadId, motivo) {
     renderListaActividades();
   });
 
-  function renderListaActividades() {
-    const filtro = filtroBusqueda.value.toLowerCase();
-    listaActividades.innerHTML = '';
-    actividades.filter(act => act.titulo.toLowerCase().includes(filtro) || act.descripcion.toLowerCase().includes(filtro))
-      .forEach(act => {
-        const card = document.createElement('div');
-        card.className = 'actividad-card';
-        card.innerHTML = `
-          <h3>${act.titulo}</h3>
-          <p>${act.descripcion}</p>
-          <p><strong>Límite:</strong> ${act.limite}</p>
-          <p><strong>Ubicación:</strong> ${act.ubicacion ? `${act.ubicacion.lat.toFixed(4)}, ${act.ubicacion.lng.toFixed(4)}` : 'No definida'}</p>
-        `;
-        card.addEventListener('click', () => mostrarDetalleActividad(act));
-        listaActividades.appendChild(card);
-      });
-  }
 
-  function mostrarDetalleActividad(actividad) {
-    if (!contenedorDetalle || !tituloDetalle || !descripcionDetalle || !inscritosDetalle || !btnInscribirse) return;
+  function mostrarDetalleActividad(actividadId) {
+  const act = window.actividades.find(a => a.id === actividadId);
+  if (!act) return;
 
-    hideAllViews();
-    contenedorDetalle.style.display = 'block';
-    tituloDetalle.textContent = actividad.titulo;
-    descripcionDetalle.textContent = actividad.descripcion;
-    inscritosDetalle.textContent = `${inscritosPorActividad.get(actividad.id)} de ${actividad.limite} personas inscritas`;
+  hideAllViews();
+  const detalleContainer = document.getElementById('actividadDetalleContainer');
+  detalleContainer.style.display = 'block';
 
-    if (detalleMap) detalleMap.remove();
-    detalleMap = L.map('detalleMapa').setView([actividad.ubicacion.lat, actividad.ubicacion.lng], 13);
+  // Verificar si el usuario está inscrito y obtener el número de inscritos
+  const estaInscrito = actividadesInscritas.some(a => a.id === actividadId);
+  const inscritosActuales = inscritosPorActividad.get(act.id) || 0;
+
+  const contenedorAcciones = document.querySelector('.detalle-acciones');
+  contenedorAcciones.innerHTML = '';
+
+  // Actualizar la información
+  document.getElementById('detalleTitulo').textContent = act.titulo;
+  document.getElementById('detalleFecha').textContent = act.fecha || 'No especificada';
+  document.getElementById('detalleHora').textContent = act.hora || 'No especificada';
+  document.getElementById('detalleUbicacion').textContent = 
+    act.ubicacion ? `${act.ubicacion.lat.toFixed(4)}, ${act.ubicacion.lng.toFixed(4)}` : 'No especificada';
+  document.getElementById('detalleCupo').textContent = 
+    `${inscritosActuales}/${act.limite} inscritos`;
+  document.getElementById('detalleDescripcion').textContent = act.descripcion;
+
+  // Configurar el mapa
+  if (act.ubicacion && act.ubicacion.lat && act.ubicacion.lng) {
+    if (window.detalleMap) {
+      window.detalleMap.remove();
+    }
+    window.detalleMap = L.map('detalleMapa').setView([act.ubicacion.lat, act.ubicacion.lng], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
-    }).addTo(detalleMap);
-    detalleMarker = L.marker([actividad.ubicacion.lat, actividad.ubicacion.lng]).addTo(detalleMap);
-
-    btnInscribirse.onclick = () => {
-      let inscritos = inscritosPorActividad.get(actividad.id);
-      if (inscritos < actividad.limite) {
-        inscritosPorActividad.set(actividad.id, inscritos + 1);
-        inscritosDetalle.textContent = `${inscritos + 1} de ${actividad.limite} personas inscritas`;
-        alert('Te has inscrito exitosamente.');
-      } else {
-        alert('La actividad ya alcanzó el límite de participantes.');
-      }
-    };
+    }).addTo(window.detalleMap);
+    L.marker([act.ubicacion.lat, act.ubicacion.lng]).addTo(window.detalleMap);
   }
+
+  // Añadir botón de acción principal (inscribirse/desinscribirse)
+  if (estaInscrito) {
+    const btnDesinscribirse = document.createElement('button');
+    btnDesinscribirse.className = 'btn-accion-principal btn-desinscribirse';
+    btnDesinscribirse.innerHTML = '<i class="fas fa-user-minus"></i> Desinscribirme';
+    btnDesinscribirse.onclick = () => mostrarModalDesinscripcion(act.id);
+    contenedorAcciones.appendChild(btnDesinscribirse);
+  } else if (inscritosActuales >= act.limite) {
+    const btnLleno = document.createElement('button');
+    btnLleno.className = 'btn-accion-principal';
+    btnLleno.disabled = true;
+    btnLleno.innerHTML = '<i class="fas fa-users-slash"></i> Cupo lleno';
+    contenedorAcciones.appendChild(btnLleno);
+  } else {
+    const btnInscribirse = document.createElement('button');
+    btnInscribirse.className = 'btn-accion-principal';
+    btnInscribirse.innerHTML = '<i class="fas fa-user-plus"></i> Inscribirse';
+    btnInscribirse.onclick = () => inscribirseEnActividad(act.id);
+    contenedorAcciones.appendChild(btnInscribirse);
+  }
+}
+
+function inscribirseEnActividad(actividadId) {
+  const actividad = window.actividades.find(act => act.id === actividadId);
+  if (!actividad) return;
+
+  const inscritosActuales = inscritosPorActividad.get(actividadId) || 0;
+  
+  if (inscritosActuales >= actividad.limite) {
+    alert('Lo sentimos, esta actividad ya está llena.');
+    return;
+  }
+
+  // Incrementar el contador de inscritos
+  inscritosPorActividad.set(actividadId, inscritosActuales + 1);
+  
+  // Agregar a actividades inscritas
+  actividadesInscritas.push({
+    id: actividadId,
+    titulo: actividad.titulo,
+    fecha: actividad.fecha,
+    hora: actividad.hora,
+    ubicacion: actividad.ubicacion ? `${actividad.ubicacion.lat.toFixed(4)}, ${actividad.ubicacion.lng.toFixed(4)}` : 'No especificada',
+    estado: 'confirmado'
+  });
+
+  // Mostrar mensaje de éxito
+  const toast = document.createElement('div');
+  toast.className = 'toast-success';
+  toast.innerHTML = `
+    <i class="fas fa-check-circle"></i>
+    Te has inscrito exitosamente en "${actividad.titulo}"
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+
+  // Actualizar la vista de detalle
+  mostrarDetalleActividad(actividadId);
+}
+
+window.volverALista = function() {
+  hideAllViews();
+  document.getElementById('listaActividadesContainer').style.display = 'block';
+  renderUserListaActividades();
+};
+
+// Actualizar la función de confirmarDesinscripcion
+window.confirmarDesinscripcion = function(actividadId) {
+  const actividad = actividadesInscritas.find(act => act.id === actividadId);
+  if (!actividad) return;
+  
+  if (confirm(`¿Estás seguro que deseas desinscribirte de "${actividad.titulo}"?`)) {
+    // Remover de actividades inscritas
+    actividadesInscritas = actividadesInscritas.filter(act => act.id !== actividadId);
+    
+    // Decrementar contador de inscritos
+    if (inscritosPorActividad.has(actividadId)) {
+      const inscritosActuales = inscritosPorActividad.get(actividadId);
+      inscritosPorActividad.set(actividadId, Math.max(0, inscritosActuales - 1));
+    }
+    
+    // Mostrar mensaje de éxito con toast
+    const toast = document.createElement('div');
+    toast.className = 'toast-success';
+    toast.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      Te has desinscrito exitosamente de "${actividad.titulo}"
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+
+    // Actualizar la vista de detalle
+    mostrarDetalleActividad(actividadId);
+  }
+};
+
+
 
   // ───────── Función para ocultar todas las vistas (elementos con la clase "view") ─────────
   function hideAllViews() {
@@ -1152,57 +1283,92 @@ function rechazarActividad(actividadId, motivo) {
 
   // ───────── Función para inicializar/reinicializar el carrusel ─────────
   function initCarousel() {
-    const wrapper = document.getElementById('carouselWrapper');
-    const slides = Array.from(wrapper.children);
-    const dots = document.querySelectorAll('.carousel-dot');
-    let currentIndex = 1;
+  const wrapper = document.getElementById('carouselWrapper');
+  const slides = Array.from(wrapper.children);
+  const dots = document.querySelectorAll('.carousel-dot');
+  let currentIndex = 1;
 
-    function renderSlides() {
-      wrapper.innerHTML = '';
-      slides.forEach(slide => slide.classList.remove('center'));
+  function renderSlides() {
+    wrapper.innerHTML = '';
+    slides.forEach(slide => slide.classList.remove('center'));
 
-      const ordered = [
-        slides[(currentIndex - 1 + slides.length) % slides.length],
-        slides[currentIndex],
-        slides[(currentIndex + 1) % slides.length]
-      ];
+    // Ordenamos: slide anterior, actual y siguiente
+    const ordered = [
+      slides[(currentIndex - 1 + slides.length) % slides.length],
+      slides[currentIndex],
+      slides[(currentIndex + 1) % slides.length]
+    ];
 
-      ordered.forEach(slide => {
-        wrapper.appendChild(slide);
-      });
-
+    ordered.forEach((slide, idx) => {
+      wrapper.appendChild(slide);
       requestAnimationFrame(() => {
-        ordered.forEach((slide, i) => {
-          slide.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-          slide.style.opacity = i === 1 ? '1' : '0.4';
-          slide.style.transform = i === 1 ? 'scale(1)' : 'scale(0.9)';
-          if (i === 1) slide.classList.add('center');
-        });
+        slide.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        if (idx === 1) {
+          slide.style.opacity = '1';
+          slide.style.transform = 'scale(1)';
+          slide.classList.add('center');
+        } else {
+          slide.style.opacity = '0.4';
+          slide.style.transform = 'scale(0.9)';
+        }
       });
 
-      dots.forEach(dot => dot.classList.remove('active'));
-      dots[currentIndex].classList.add('active');
+      // Verificar si este slide es el del calendario (usando el alt de la imagen)
+      const img = slide.querySelector("img");
+      if (img && img.alt.trim().toLowerCase().includes("calendario")) {
+        // Asignar el listener de doble clic (solo una vez) para mostrar el calendario del carrusel
+        if (!img.dataset.dblclickBound) {
+          img.addEventListener("dblclick", function (e) {
+            e.stopPropagation();
+            renderCarouselCalendar();
+          });
+          img.dataset.dblclickBound = "true";
+        }
+      }
+
+      if (img && img.alt.trim().toLowerCase().includes("principal")) {
+        if (!img.dataset.clickBound) {
+          img.addEventListener("dblclick", function(e) {
+            e.stopPropagation();
+            mostrarActividadDestacada();
+          });
+          img.dataset.clickBound = "true";
+        }
+      }
+      if (img && img.alt.trim().toLowerCase().includes('redes')) {
+        if (!img.dataset.clickBound) {
+          img.addEventListener('dblclick', function(e) {
+            e.stopPropagation();
+            mostrarRedesSociales();
+          });
+          img.dataset.clickBound = 'true';
+        }
     }
 
-    document.querySelector('.arrow-left').addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      renderSlides();
-    });
-
-    document.querySelector('.arrow-right').addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      renderSlides();
+      
     });
 
     dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentIndex);
       dot.addEventListener('click', () => {
         currentIndex = index;
         renderSlides();
       });
     });
-
-    renderSlides();
   }
+
+  // Flechas de navegación del carrusel
+  document.querySelector('.arrow.arrow-left')?.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    renderSlides();
+  });
+  document.querySelector('.arrow.arrow-right')?.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    renderSlides();
+  });
+
+  renderSlides();
+}
 
   // ───────── Toggle del Sidebar ─────────
   const menuToggle = document.getElementById('menuToggle');
@@ -1302,12 +1468,289 @@ function rechazarActividad(actividadId, motivo) {
     }, 3000);
   });
 
-  // Botón "Volver al Dashboard" en la vista de Perfil
-  backToDashBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    hideAllViews();
-    dashboardView.style.display = 'block';
-    initCarousel();
+  let carouselCurrentDate = new Date();
+
+function renderCarouselMonthlyCalendar(date) {
+  const calendarGrid = document.querySelector('#carouselCalendarContainer .carousel-calendar-grid');
+  if (!calendarGrid) {
+    console.error("No se encontró '.carousel-calendar-grid' en #carouselCalendarContainer");
+    return;
+  }
+  calendarGrid.innerHTML = '';
+
+  const monthYearLabel = document.getElementById('carouselCalendarMonthYear');
+  const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  monthYearLabel.textContent = monthNames[date.getMonth()] + ' ' + date.getFullYear();
+
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  const startingDay = firstDay.getDay();
+  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+  for (let i = 0; i < startingDay; i++) {
+    const blankCell = document.createElement('div');
+    blankCell.classList.add('day');
+    calendarGrid.appendChild(blankCell);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayCell = document.createElement('div');
+    dayCell.classList.add('day');
+
+    const dayNumber = document.createElement('div');
+    dayNumber.classList.add('day-number');
+    dayNumber.textContent = day;
+    dayCell.appendChild(dayNumber);
+
+    const dayStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    
+    // Filtra las actividades para este día usando window.actividades (asegúrate de que esté definido globalmente)
+    const eventsForDay = window.actividades.filter(activity => activity.fecha === dayStr);
+    // Dentro del bucle que crea las celdas para cada día…
+    if (eventsForDay.length > 0) {
+      const indicator = document.createElement('div');
+      indicator.classList.add('event-indicator');
+      dayCell.appendChild(indicator);
+    }
+
+    
+    // Listener para mostrar el modal de actividades si se hace click (opcional)
+    dayCell.addEventListener('click', () => {
+      showActivitiesForDay(dayStr, eventsForDay);
+    });
+
+    calendarGrid.appendChild(dayCell);
+  }
+}
+
+function obtenerActividadDestacada() {
+  if (!window.actividades || window.actividades.length === 0) {
+    return null;
+  }
+
+  const ahora = new Date();
+  const actividadesFuturas = window.actividades
+    .filter(act => new Date(act.fecha) >= ahora)
+    .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+
+  return actividadesFuturas[0] || window.actividades[0];
+}
+
+// Función para mostrar la actividad destacada
+function mostrarActividadDestacada() {
+  const actividadDestacada = obtenerActividadDestacada();
+  if (actividadDestacada) {
+    mostrarDetalleActividad(actividadDestacada.id);
+  } else {
+    alert('No hay actividades disponibles para mostrar.');
+  }
+}
+
+
+function showActivitiesForDay(dayStr, events) {
+  // Cerrar modal existente si lo hay
+  const existingModal = document.querySelector('.day-activities-modal');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Crear el contenedor modal
+  const modal = document.createElement('div');
+  modal.classList.add('day-activities-modal');
+  modal.innerHTML = `
+    <div class="day-activities-content">
+      <span class="close-button">&times;</span>
+      <h2>Actividades para ${dayStr}</h2>
+      <div class="activities-list"></div>
+    </div>
+  `;
+  
+  const listDiv = modal.querySelector('.activities-list');
+  if (events.length === 0) {
+    listDiv.innerHTML = "<p>No hay actividades para este día.</p>";
+  } else {
+    events.forEach(activity => {
+      const evDiv = document.createElement('div');
+      evDiv.classList.add('activity-item');
+      evDiv.innerHTML = `
+        <h3>${activity.titulo}</h3>
+        <p><i class="fas fa-clock"></i> ${activity.hora}</p>
+        <button class="btn-ver-detalle-calendario">
+          <i class="fas fa-eye"></i> Ver Detalle
+        </button>
+      `;
+
+      // Agregar evento click al botón de ver detalle
+      evDiv.querySelector('.btn-ver-detalle-calendario').addEventListener('click', () => {
+        modal.remove(); // Cerrar el modal de actividades
+        mostrarDetalleActividad(activity.id); // Mostrar el detalle de la actividad
+      });
+
+      listDiv.appendChild(evDiv);
+    });
+  }
+  
+  // Cerrar el modal al pulsar en la "X"
+  modal.querySelector(".close-button").addEventListener("click", () => {
+    modal.remove();
   });
+  
+  document.body.appendChild(modal);
+}
+
+function renderCarouselCalendar() {
+  hideAllViews();
+  const container = document.getElementById('carouselCalendarContainer');
+  container.style.display = 'block';
+  renderCarouselMonthlyCalendar(carouselCurrentDate);
+}
+
+function mostrarModalDesinscripcion(actividadId) {
+  const actividad = actividades.find(act => act.id === actividadId);
+  if (!actividad) return;
+  
+  const modal = document.getElementById('modalDesinscripcion');
+  
+  // Actualizar la información en el modal
+  document.getElementById('desinscripcionActividadTitulo').textContent = actividad.titulo;
+  document.getElementById('desinscripcionActividadFecha').textContent = actividad.fecha || 'No especificada';
+  document.getElementById('desinscripcionActividadHora').textContent = actividad.hora || 'No especificada';
+  document.getElementById('desinscripcionActividadUbicacion').textContent = 
+    actividad.ubicacion ? `${actividad.ubicacion.lat.toFixed(4)}, ${actividad.ubicacion.lng.toFixed(4)}` : 'No especificada';
+
+  // Mostrar el modal
+  modal.style.display = 'flex';
+
+  // Configurar botones
+  document.getElementById('btnConfirmarDesinscripcion').onclick = () => {
+    procesarDesinscripcion(actividadId);
+    modal.style.display = 'none';
+  };
+
+  document.getElementById('btnCancelarDesinscripcion').onclick = () => {
+    modal.style.display = 'none';
+  };
+}
+
+// Función para procesar la desinscripción
+function procesarDesinscripcion(actividadId) {
+  const actividad = window.actividades.find(act => act.id === actividadId);
+  if (!actividad) return;
+
+  // Remover de actividades inscritas
+  actividadesInscritas = actividadesInscritas.filter(act => act.id !== actividadId);
+  
+  // Decrementar contador de inscritos
+  if (inscritosPorActividad.has(actividadId)) {
+    const inscritosActuales = inscritosPorActividad.get(actividadId);
+    inscritosPorActividad.set(actividadId, Math.max(0, inscritosActuales - 1));
+  }
+
+  // Mostrar mensaje de éxito con toast
+  const toast = document.createElement('div');
+  toast.className = 'toast-success';
+  toast.innerHTML = `
+    <i class="fas fa-check-circle"></i>
+    Te has desinscrito exitosamente de "${actividad.titulo}"
+  `;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+
+  // Actualizar la vista de detalle inmediatamente
+  mostrarDetalleActividad(actividadId);
+}
+
+const comunidades = [
+  {
+    nombre: "Club Deportivo Limón",
+    tipo: "Club Multideportivo",
+    logo: "imagenes/club-limon.jpg",
+    descripcion: "Principal club deportivo de la zona, organizando eventos y actividades para toda la comunidad.",
+    redes: {
+      facebook: "https://facebook.com/clublimon",
+      instagram: "https://instagram.com/clublimon",
+      whatsapp: "https://wa.me/50688888888"
+    }
+  },
+  {
+    nombre: "Runners Caribe",
+    tipo: "Comunidad de Corredores",
+    logo: "imagenes/runners-caribe.jpg",
+    descripcion: "Grupo de entusiastas del running que organizan carreras y entrenamientos semanales.",
+    redes: {
+      facebook: "https://facebook.com/runnerscaribe",
+      instagram: "https://instagram.com/runnerscaribe",
+      twitter: "https://twitter.com/runnerscaribe"
+    }
+  },
+  {
+    nombre: "Yoga en la Playa",
+    tipo: "Comunidad de Yoga",
+    logo: "imagenes/yoga-playa.jpg",
+    descripcion: "Clases de yoga al aire libre y meditación frente al mar. \n \n",
+    redes: {
+      instagram: "https://instagram.com/yogaplaya",
+      whatsapp: "https://wa.me/50699999999",
+      youtube: "https://youtube.com/yogaplaya"
+    }
+  }
+];
+
+function mostrarRedesSociales() {
+  hideAllViews();
+  document.getElementById('redesSocialesContainer').style.display = 'block';
+  renderizarComunidades();
+}
+
+function renderizarComunidades() {
+  const grid = document.getElementById('comunidadesGrid');
+  grid.innerHTML = '';
+
+  comunidades.forEach(comunidad => {
+    const card = document.createElement('div');
+    card.className = 'comunidad-card';
+
+    const redesSocialesHTML = Object.entries(comunidad.redes)
+      .map(([red, url]) => {
+        const etiquetas = {
+          facebook: '    Síguenos en Facebook',
+          instagram: '   Síguenos en Instagram',
+          twitter: '     Síguenos en Twitter',
+          youtube: '     Suscríbete en YouTube',
+          whatsapp: '    Contáctanos por WhatsApp'
+        };
+
+        const iconos = {
+          facebook: 'fa-brands fa-facebook',
+          instagram: 'fa-brands fa-instagram',
+          twitter: 'fa-brands fa-twitter',
+          youtube: 'fa-brands fa-youtube',
+          whatsapp: 'fa-brands fa-whatsapp'
+        };
+
+        return `
+          <a href="${url}" target="_blank" class="red-social-link ${red}">
+            <i class="${iconos[red]}"></i>
+            ${etiquetas[red]}
+          </a>
+        `;
+      }).join('');
+
+    card.innerHTML = `
+      <div class="comunidad-header">
+        <div class="comunidad-info">
+          <h3>${comunidad.nombre}</h3>
+          <span class="comunidad-tipo">${comunidad.tipo}</span>
+        </div>
+      </div>
+      <p class="comunidad-descripcion">${comunidad.descripcion}</p>
+      <div class="redes-sociales-lista">
+        ${redesSocialesHTML}
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
 
 });
