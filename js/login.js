@@ -1,6 +1,11 @@
 document.getElementById("loginForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
+  console.log(
+  "Usuarios actuales:",
+  (window.usuarios || []).map(u => `Correo: ${u.correo}, Contraseña: ${u.contraseña}`)
+);
+
   // Obtener valores
   const correo = document.getElementById("correo").value.trim();
   const contraseña = document.getElementById("contraseña").value;
@@ -29,24 +34,17 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
 
   // Si las validaciones pasan, simular login
   if (isValid) {
-    // Usuarios de prueba (simulados)
-    const usuarios = [
-      { correo: "davidcg2508@gmail.com", contraseña: "abc123", rol: "user" },
-      { correo: "roymarcastillo@gmail.com", contraseña: "abc123", rol: "moderator" },
-      { correo: "admin@gmail.com", contraseña: "abc123", rol: "admin" }
-    ];
+  // Usar el array global de usuarios
+  const usuarios = window.usuarios || [];
+  const usuario = usuarios.find(u => u.correo === correo && u.contraseña === contraseña);
 
-    // Buscar coincidencia
-    const usuario = usuarios.find(u => u.correo === correo && u.contraseña === contraseña);
-
-    if (usuario) {
-      // Guardar en localStorage (simula sesión)
-      localStorage.setItem("usuarioActual", JSON.stringify(usuario));
-      localStorage.setItem("userRole", usuario.rol);
-      alert("¡Inicio de sesión exitoso!");
-      window.location.href = "dashboard.html"; // Redirigir al dashboard
-    } else {
-      document.getElementById("errorPass").textContent = "Correo o contraseña incorrectos";
-    }
+  if (usuario) {
+    localStorage.setItem("usuarioActual", JSON.stringify(usuario));
+    localStorage.setItem("userRole", usuario.rol);
+    alert("¡Inicio de sesión exitoso!");
+    window.location.href = "dashboard.html";
+  } else {
+    document.getElementById("errorPass").textContent = "Correo o contraseña incorrectos";
   }
+}
 });

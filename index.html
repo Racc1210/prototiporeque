@@ -11,120 +11,183 @@
 
   <style>
     body {
-      background: linear-gradient(to right, #ffeb3b -20%, #ffd54f 50%, #ff9800 140%);
-      background-size: cover;
       min-height: 100vh;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(90deg, #ffe066 0%, #ffa94d 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      font-size: 1.18em;
     }
-
-    .card {
-      border-radius: 20px;
-      background-color: rgba(0, 0, 0, 0.8);
-      color: white;
-      border: none;
-      padding: 2rem;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+    .login-card {
+      background: linear-gradient(120deg, #7c5a2e 0%, #a97c50 100%);
+      border-radius: 24px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.13);
+      padding: 48px 48px 36px 48px;
+      width: 600px;
+      max-width: 95vw;
+      border: 3px solid #6d4c1b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 520px;
     }
-
-    .card h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+    .login-title {
+      background: #5c5246;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.25em;
+      border-radius: 40px;
+      padding: 18px 0;
+      width: 80%;
+      text-align: center;
+      margin-bottom: 28px;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
     }
-
-    .form-control {
-      background-color: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.75rem;
-    }
-
-    .form-control::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    .form-label {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .btn-primary {
-      background-color: #80c827;
-      border: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: black;
-    }
-
-    .btn-primary:hover {
-      background-color: #6cb320;
-    }
-
-    .login-links {
-      margin-top: 1.2rem;
+    .login-extra {
+      width: 100%;
+      margin-bottom: 22px;
+      color: #fff;
+      font-size: 1.04em;
       text-align: center;
     }
-
-    .login-links a {
-      color: #80c827;
+    .login-extra a {
+      color: #00c853;
       text-decoration: none;
+      font-weight: 500;
+      margin-left: 4px;
+      transition: text-decoration 0.2s;
+      font-size: 1.04em;
     }
-
-    .login-links a:hover {
+    .login-extra a:hover {
       text-decoration: underline;
     }
-
-    .error-message {
-      color: #ff6b6b;
-      font-size: 0.9rem;
+    label {
+      color: #fff;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 7px;
+      display: block;
+      text-align: left;
+      width: 100%;
+      text-align: left;
+      font-size: 1.08em;
+      letter-spacing: 0.2px;
     }
 
-    .login-icon {
-      font-size: 4rem;
-      color: #80c827;
-      margin-bottom: 0.5rem;
+    .form-group {
+    width: 100%;           /* Ajusta el ancho según lo que necesites */
+    margin-left: -80px;       /* Alinea a la izquierda */
+    margin-right: auto;
+  }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 170%;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 22px;
+      background: #5c5246;
+      color: #fff;
+      font-size: 1.13em;
+      margin-bottom: 13px;
+      outline: none;
+      margin-top: 2px;
+      margin-left: 0px;
+      margin-right: auto;
+      box-sizing: border-box;
+      transition: box-shadow 0.2s;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      box-shadow: 0 0 0 2px #00c85355
+    }
+    input[type="email"]::placeholder,
+    input[type="password"]::placeholder {
+      color: #bdbdbd;
+    }
+    .login-btn {
+      width: 80%;
+      background: linear-gradient(90deg, #00c853 0%, #1de982 100%);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 22px;
+      padding: 15px 0;
+      font-size: 1.13em;
+      margin: 28px auto 0 auto;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: block;
+      letter-spacing: 0.5px;
+    }
+    .login-btn:hover {
+      background: linear-gradient(90deg, #00b44b 0%, #13c76a 100%);
+    }
+    .forgot-link {
+      color: #00c853;
+      text-decoration: underline;
+      font-size: 1.03em;
+      margin-top: 22px;
+      display: block;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover {
+      color: #009624;
+    }
+    .error-message {
+      color: #ff6b6b;
+      font-size: 0.97em;
+      margin: 2px 0 0 0;
+      min-height: 18px;
+      text-align: left;
+      width: 100%;
+      font-weight: 500;
+    }
+    @media (max-width: 600px) {
+      .login-card {
+        padding: 18px 4vw 14px 4vw;
+        width: 98vw;
+        min-width: unset;
+        min-height: unset;
+      }
+      .login-title, .login-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-5">
-        <div class="card text-center">
-          <div class="card-body">
-            <h1>Iniciar Sesión</h1>
-            <p>¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a></p>
-
-            <form id="loginForm" class="mt-4">
-              <div class="mb-3 text-start">
-                <label for="correo" class="form-label">Correo</label>
-                <input type="email" id="correo" class="form-control" placeholder="ejemplo@correo.com" required />
-                <div id="errorCorreo" class="error-message"></div>
-              </div>
-
-              <div class="mb-3 text-start">
-                <label for="contraseña" class="form-label">Contraseña</label>
-                <input type="password" id="contraseña" class="form-control" placeholder="Tu contraseña" required />
-                <div id="errorPass" class="error-message"></div>
-              </div>
-
-              <button type="submit" class="btn btn-primary w-100 mt-2">Ingresar</button>
-              <div class="login-links">
-                <p><a href="recuperar-pass.html">¿Olvidaste tu contraseña?</a></p>
-              </div>
-            </form>
-
-          </div>
-        </div>
-      </div>
+  <div class="login-card">
+    <div class="login-title">Iniciar sesión</div>
+    <div class="login-extra">
+      ¿No tienes una cuenta?
+      <a href="registro.html">Regístrate aquí</a>
     </div>
+    <form id="loginForm" autocomplete="off">
+  <div class="form-group">
+    <label for="correo">Correo</label>
+    <input type="email" id="correo" placeholder="ejemplo@correo.com" required />
+    <div id="errorCorreo" class="error-message"></div>
+  </div>
+  <div class="form-group">
+    <label for="contraseña">Contraseña</label>
+    <input type="password" id="contraseña" placeholder="Tu contraseña" required />
+    <div id="errorPass" class="error-message"></div>
+  </div>
+  <button type="submit" class="login-btn">Ingresar</button>
+  <a href="recuperar-pass.html" class="forgot-link">¿Olvidaste tu contraseña?</a>
+</form>
   </div>
 
   <!-- Bootstrap JS + tu script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script src="js/usuarios.js"></script>
+  <script src="js/validaciones.js"></script>
   <script src="js/login.js"></script>
 </body>
 </html>

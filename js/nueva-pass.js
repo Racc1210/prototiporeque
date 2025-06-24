@@ -1,34 +1,52 @@
-document.getElementById("formNuevaPass").addEventListener("submit", function(e) {
-  e.preventDefault();
-  
-  // Obtener valores
-  const nuevaPass = document.getElementById("nuevaPass").value;
-  const confirmarPass = document.getElementById("confirmarPass").value;
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("formNuevaPass");
+  if (!form) return;
 
-  // Resetear mensajes de error
-  document.getElementById("errorNuevaPass").textContent = "";
-  document.getElementById("errorConfirmarPass").textContent = "";
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  // Validaciones
-  let isValid = true;
+    const nuevaPass = document.getElementById("nuevaPass").value;
+    const confirmarPass = document.getElementById("confirmarPass").value;
 
-  // 1. Contraseña segura (mínimo 6 caracteres)
-  if (nuevaPass.length < 6) {
-    document.getElementById("errorNuevaPass").textContent = "Mínimo 6 caracteres";
-    isValid = false;
-  }
+    document.getElementById("errorNuevaPass").textContent = "";
+    document.getElementById("errorConfirmarPass").textContent = "";
 
-  // 2. Contraseñas coinciden
-  if (nuevaPass !== confirmarPass) {
-    document.getElementById("errorConfirmarPass").textContent = "Las contraseñas no coinciden";
-    isValid = false;
-  }
+    let isValid = true;
 
-  // Si todo es válido, simular cambio exitoso
-  if (isValid) {
-    // En un sistema real, aquí se enviaría la nueva contraseña al backend
-    alert("¡Contraseña actualizada con éxito! Serás redirigido al login.");
-    localStorage.removeItem("correoRecuperacion"); // Limpiar datos temporales
-    window.location.href = "index.html"; // Redirigir al login
-  }
+    if (nuevaPass.length < 6) {
+      document.getElementById("errorNuevaPass").textContent = "Mínimo 6 caracteres";
+      isValid = false;
+    }
+    if (nuevaPass !== confirmarPass) {
+      document.getElementById("errorConfirmarPass").textContent = "Las contraseñas no coinciden";
+      isValid = false;
+    }
+
+    // Obtener el correo del usuario que está cambiando la contraseña
+    const correo = localStorage.getItem("correoRecuperacion");
+
+    if (isValid && correo) {
+      // Buscar y actualizar la contraseña en el array global
+      const usuarios = window.usuarios || [];
+      const usuario = usuarios.find(u => u.correo === correo);
+      if (usuario) {
+        usuario.contraseña = nuevaPass;
+
+        // Guardar el array actualizado en localStorage
+        localStorage.setItem("usuarios", JSON.stringify(window.usuarios));
+
+        // Mostrar usuarios actuales en consola (solo para pruebas)
+        console.log(
+          "Usuarios actuales:",
+          window.usuarios.map(u => `Correo: ${u.correo}, Contraseña: ${u.contraseña}`)
+        );
+
+        alert("¡Contraseña actualizada con éxito! Serás redirigido al login.");
+        localStorage.removeItem("correoRecuperacion");
+        window.location.href = "index.html";
+      } else {
+        alert("No se encontró el usuario para actualizar la contraseña.");
+      }
+    }
+  });
 });

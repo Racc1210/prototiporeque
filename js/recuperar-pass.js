@@ -3,7 +3,6 @@ document.getElementById("formRecuperar").addEventListener("submit", function(e) 
   
   const correo = document.getElementById("correo").value.trim();
   document.getElementById("errorCorreo").textContent = "";
-  const correoconfirmar = "davidcg2508@gmail.com";
 
   // Validar formato de correo
   if (!correo) {
@@ -16,7 +15,11 @@ document.getElementById("formRecuperar").addEventListener("submit", function(e) 
     return;
   }
 
-  if (correo !== correoconfirmar) {
+  // Verificar si el correo existe en window.usuarios
+  const usuarios = window.usuarios || [];
+  const usuarioExiste = usuarios.some(u => u.correo === correo);
+
+  if (!usuarioExiste) {
     document.getElementById("errorCorreo").textContent = "Correo no registrado";
     return;
   }

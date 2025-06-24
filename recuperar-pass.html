@@ -6,81 +6,172 @@
   <title>Recuperar Contraseña</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     body {
-      background-color: #e28e20;
-      background-image: url('ruta/a/tu/imagen-de-fondo.jpg'); /* Opcional: añade una imagen de fondo */
-      background-size: cover;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(90deg, #ffe066 0%, #ffa94d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.18em;
     }
-    .card {
-      border-radius: 15px;
-      background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semitransparente */
-      color: white; /* Texto blanco para contrastar */
-      border: none;
+    .recuperar-card {
+      background: linear-gradient(120deg, #7c5a2e 0%, #a97c50 100%);
+      border-radius: 24px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.13);
+      padding: 48px 48px 36px 48px;
+      width: 600px;
+      max-width: 95vw;
+      border: 3px solid #6d4c1b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 350px;
     }
-    .btn-primary {
-      background-color: #80c827;
+    .recuperar-title {
+      background: #5c5246;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.25em;
+      border-radius: 40px;
+      padding: 18px 0;
+      width: 80%;
+      text-align: center;
+      margin-bottom: 28px;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+    .recuperar-desc {
+      color: #fff;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 28px;
+      font-size: 1.04em;
+    }
+    .form-group {
+      width: 100%;
+      margin-left: -80px;
+      margin-right: auto;
+    }
+    label {
+      color: #fff;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 7px;
+      display: block;
+      text-align: left;
+      width: 100%;
+      font-size: 1.08em;
+      letter-spacing: 0.2px;
+    }
+    input[type="email"] {
+      width: 170%;
+      padding: 15px 20px;
       border: none;
-      color: black; /* Texto negro para el botón verde */
-      font-weight: bold;
+      border-radius: 22px;
+      background: #5c5246;
+      color: #fff;
+      font-size: 1.13em;
+      margin-bottom: 13px;
+      outline: none;
+      margin-top: 2px;
+      margin-left: 0px;
+      margin-right: auto;
+      box-sizing: border-box;
+      transition: box-shadow 0.2s;
+      display: block;
+    }
+    input[type="email"]:focus {
+      box-shadow: 0 0 0 2px #00c85355;
+    }
+    input[type="email"]::placeholder {
+      color: #bdbdbd;
+    }
+    .recuperar-btn {
+      width: 80%;
+      background: linear-gradient(90deg, #00c853 0%, #1de982 100%);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 22px;
+      padding: 15px 0;
+      font-size: 1.13em;
+      margin: 28px auto 0 auto;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: block;
+      letter-spacing: 0.5px;
+    }
+    .recuperar-btn:hover {
+      background: linear-gradient(90deg, #00b44b 0%, #13c76a 100%);
     }
     .error-message {
       color: #ff6b6b;
-      font-size: 0.9rem;
+      font-size: 0.97em;
+      margin: 2px 0 0 0;
+      min-height: 18px;
+      text-align: left;
+      width: 100%;
+      font-weight: 500;
     }
-    .login-links {
+    .recuperar-links {
       text-align: center;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
-    .login-links a {
-      text-decoration: none;
-      color: #80c827; /* Mismo verde que el botón */
+    .recuperar-links a {
+      text-decoration: underline;
+      color: #00c853;
+      font-size: 1.03em;
+      transition: color 0.2s;
     }
-    .login-links p {
-      margin-bottom: 0.5rem;
+    .recuperar-links a:hover {
+      color: #009624;
     }
-    .form-control {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    .form-control::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-    .form-label {
-      color: white;
+    @media (max-width: 600px) {
+      .recuperar-card {
+        padding: 18px 4vw 14px 4vw;
+        width: 98vw;
+        min-width: unset;
+        min-height: unset;
+      }
+      .recuperar-title, .recuperar-btn {
+        width: 100%;
+      }
+      input[type="email"] {
+        width: 100%;
+        margin-left: 0;
+      }
+      .form-group {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="card shadow">
-          <div class="card-body p-4">
-            <h2 class="text-center mb-4">Cambiar contraseña</h2>
-            <p class="text-center mb-4">Ingresa el correo asociado a la cuenta</p>
-            
-            <form id="formRecuperar">
-              <!-- Correo -->
-              <div class="mb-3">
-                <label for="correo" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="correo" required placeholder="ejemplo@limon.com">
-                <div id="errorCorreo" class="error-message"></div>
-              </div>
-              
-              <!-- Botón -->
-              <button type="submit" class="btn btn-primary w-100">Continuar</button>
-            </form>
-          </div>
-        </div>
+  <div class="recuperar-card">
+    <div class="recuperar-title">Cambiar contraseña</div>
+    <div class="recuperar-desc">Ingresa el correo asociado a la cuenta</div>
+    <form id="formRecuperar">
+      <div class="form-group">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" required placeholder="ejemplo@limon.com">
+        <div id="errorCorreo" class="error-message"></div>
       </div>
+      <button type="submit" class="recuperar-btn">Continuar</button>
+    </form>
+    <div class="recuperar-links">
+      <a href="index.html">Volver al inicio de sesión</a>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Nuestro JavaScript -->
+  <script src="js/usuarios.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/validaciones.js"></script>
   <script src="js/recuperar-pass.js"></script>
 </body>
 </html>

@@ -32,3 +32,39 @@ document.getElementById("formVerificarCodigo").addEventListener("submit", functi
 document.getElementById("btnReenviar").addEventListener("click", function() {
   alert(`Código reenviado a ${correo}. Usa "${CODIGO_CORRECTO}" para pruebas.`);
 });
+
+document.getElementById("formVerificarCodigo").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const codigoIngresado = 
+    document.getElementById("codigo1").value.trim() +
+    document.getElementById("codigo2").value.trim() +
+    document.getElementById("codigo3").value.trim() +
+    document.getElementById("codigo4").value.trim() +
+    document.getElementById("codigo5").value.trim() +
+    document.getElementById("codigo6").value.trim();
+
+  if (codigoIngresado === CODIGO_CORRECTO) {
+    window.location.href = "nueva-pass.html";
+  } else {
+    intentos++;
+    document.getElementById("errorCodigo").textContent = `Código incorrecto (Intento ${intentos}/3)`;
+    if (intentos >= 3) {
+      alert("Límite de intentos alcanzado. Serás redirigido.");
+      window.location.href = "recuperar-pass.html";
+    }
+  }
+});
+
+const inputs = Array.from(document.querySelectorAll('.codigo-input'));
+inputs.forEach((input, idx) => {
+  input.addEventListener('input', (e) => {
+    if (input.value.length === 1 && idx < inputs.length - 1) {
+      inputs[idx + 1].focus();
+    }
+  });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && input.value === '' && idx > 0) {
+      inputs[idx - 1].focus();
+    }
+  });
+});

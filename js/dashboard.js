@@ -3,34 +3,127 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarousel();
   
   window.actividades = [
-    {
-      id: 1,
-      titulo: 'Entrenamiento Matutino',
-      descripcion: 'Sesión de ejercicio al aire libre en el parque central.',
-      limite: 10,
-      ubicacion: { lat: 9.998, lng: -83.753 },
-      fecha: '2025-06-12',
-      hora: '08:00 AM - 09:00 AM'
-    },
-    {
-      id: 2,
-      titulo: 'Clase de Yoga',
-      descripcion: 'Clase de yoga para mejorar la flexibilidad y la concentración.',
-      limite: 15,
-      ubicacion: { lat: 9.7489, lng: -83.7534 },
-      fecha: '2025-06-12',
-      hora: '10:00 AM - 11:00 AM'
-    },
-    {
-      id: 3,
-      titulo: 'Competencia de Ciclismo',
-      descripcion: 'Carrera de bicicletas para poner a prueba tu resistencia.',
-      limite: 20,
-      ubicacion: { lat: 9.9, lng: -84.000 },
-      fecha: '2025-06-20',
-      hora: '07:30 AM - 09:20 AM'
-    }
-  ];
+  {
+    id: 1,
+    titulo: 'Entrenamiento Matutino',
+    descripcion: 'Sesión de ejercicio al aire libre en el parque central.',
+    limite: 10,
+    inscritos: 7,
+    ubicacion: { lat: 9.998, lng: -83.753 },
+    fecha: '2025-06-12',
+    hora: '08:00 AM - 09:00 AM',
+    aprobada: true,
+    inscrito: true
+  },
+  {
+    id: 2,
+    titulo: 'Clase de Yoga',
+    descripcion: 'Clase de yoga para mejorar la flexibilidad y la concentración.',
+    limite: 15,
+    inscritos: 8,
+    ubicacion: { lat: 9.7489, lng: -83.7534 },
+    fecha: '2025-06-13',
+    hora: '10:00 AM - 11:00 AM',
+    aprobada: true,
+    inscrito: true
+  },
+  {
+    id: 3,
+    titulo: 'Competencia de Ciclismo',
+    descripcion: 'Carrera de bicicletas para poner a prueba tu resistencia.',
+    limite: 20,
+    inscritos: 0,
+    ubicacion: { lat: 9.9, lng: -84.000 },
+    fecha: '2025-06-20',
+    hora: '07:30 AM - 09:20 AM',
+    aprobada: false,
+    inscrito: false
+  },
+  {
+    id: 4,
+    titulo: 'Torneo de Fútbol Infantil',
+    descripcion: 'Torneo para niños y niñas de 8 a 12 años.',
+    limite: 16,
+    inscritos: 16,
+    ubicacion: { lat: 9.95, lng: -83.95 },
+    fecha: '2025-06-15',
+    hora: '09:00 AM - 12:00 PM',
+    aprobada: true,
+    inscrito: false
+  },
+  {
+    id: 5,
+    titulo: 'Clase de Zumba',
+    descripcion: 'Clase de zumba gratuita en el gimnasio municipal.',
+    limite: 25,
+    inscritos: 0,
+    ubicacion: { lat: 9.96, lng: -83.96 },
+    fecha: '2025-06-18',
+    hora: '06:00 PM - 07:00 PM',
+    aprobada: false,
+    inscrito: false
+  },
+  {
+    id: 6,
+    titulo: 'Caminata Ecológica',
+    descripcion: 'Recorrido guiado por senderos naturales.',
+    limite: 30,
+    inscritos: 18,
+    ubicacion: { lat: 9.97, lng: -83.97 },
+    fecha: '2025-06-22',
+    hora: '07:00 AM - 10:00 AM',
+    aprobada: true,
+    inscrito: true
+  },
+  {
+    id: 7,
+    titulo: 'Taller de Defensa Personal',
+    descripcion: 'Aprende técnicas básicas de defensa personal.',
+    limite: 20,
+    inscritos: 0,
+    ubicacion: { lat: 9.98, lng: -83.98 },
+    fecha: '2025-06-25',
+    hora: '05:00 PM - 07:00 PM',
+    aprobada: true,
+    inscrito: false
+  },
+  {
+    id: 8,
+    titulo: 'Clase de Natación',
+    descripcion: 'Clase para principiantes en la piscina olímpica.',
+    limite: 12,
+    inscritos: 9,
+    ubicacion: { lat: 9.99, lng: -83.99 },
+    fecha: '2025-06-28',
+    hora: '03:00 PM - 04:00 PM',
+    aprobada: true,
+    inscrito: false
+  },
+  {
+    id: 9,
+    titulo: 'Sesión de Meditación',
+    descripcion: 'Meditación guiada al aire libre.',
+    limite: 20,
+    inscritos: 0,
+    ubicacion: { lat: 10.00, lng: -84.00 },
+    fecha: '2025-06-30',
+    hora: '07:00 PM - 08:00 PM',
+    aprobada: false,
+    inscrito: false
+  },
+  {
+    id: 10,
+    titulo: 'Torneo de Baloncesto',
+    descripcion: 'Competencia abierta para equipos locales.',
+    limite: 10,
+    inscritos: 10,
+    ubicacion: { lat: 10.01, lng: -84.01 },
+    fecha: '2025-07-02',
+    hora: '04:00 PM - 08:00 PM',
+    aprobada: true,
+    inscrito: false
+  }
+];
 
   // Variable para controlar inscritos por actividad.
   let inscritosPorActividad = new Map();
@@ -83,16 +176,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderCalendarioActividades() {
   const calendarioContainer = document.getElementById('calendarioActividades');
   if (!calendarioContainer) return;
-  
+
+  // Filtrar solo actividades en las que el usuario está inscrito
+  const inscritas = window.actividades.filter(a => a.inscrito);
+
   calendarioContainer.innerHTML = '';
-  
-  if (actividadesInscritas.length === 0) {
+
+  if (inscritas.length === 0) {
     calendarioContainer.innerHTML = '<p style="text-align: center; color: #999; font-style: italic;">No tienes actividades programadas</p>';
     return;
   }
-  
+
   // Agrupar actividades por fecha
-  const actividadesPorFecha = actividadesInscritas.reduce((grupos, actividad) => {
+  const actividadesPorFecha = inscritas.reduce((grupos, actividad) => {
     const fecha = actividad.fecha;
     if (!grupos[fecha]) {
       grupos[fecha] = [];
@@ -100,48 +196,59 @@ function renderCalendarioActividades() {
     grupos[fecha].push(actividad);
     return grupos;
   }, {});
-  
+
   // Ordenar fechas
   const fechasOrdenadas = Object.keys(actividadesPorFecha).sort();
-  
+
   fechasOrdenadas.forEach(fecha => {
     const fechaFormateada = formatearFecha(fecha);
     const dayGroup = document.createElement('div');
     dayGroup.className = 'calendar-day-group';
-    
+
     const fechaHeader = document.createElement('h3');
     fechaHeader.className = 'calendar-date-header';
     fechaHeader.innerHTML = `<i class="fas fa-calendar-day"></i> ${fechaFormateada}`;
     dayGroup.appendChild(fechaHeader);
-    
+
     actividadesPorFecha[fecha].forEach(actividad => {
       const actividadCard = document.createElement('div');
-      actividadCard.className = `calendar-activity-card estado-${actividad.estado}`;
+      actividadCard.className = `calendar-activity-card estado-confirmado`;
       actividadCard.innerHTML = `
         <div class="calendar-activity-info">
           <div class="calendar-activity-main">
             <h4><i class="fas fa-dumbbell"></i> ${actividad.titulo}</h4>
             <div class="calendar-activity-details">
               <span class="calendar-time"><i class="fas fa-clock"></i> ${actividad.hora}</span>
-              <span class="calendar-location"><i class="fas fa-map-marker-alt"></i> ${actividad.ubicacion}</span>
-              <span class="calendar-status status-${actividad.estado}">
-                ${actividad.estado === 'confirmado' ? 'Confirmado' : 'Pendiente'}
+              <span class="calendar-location"><i class="fas fa-map-marker-alt"></i> ${actividad.ubicacion ? `${actividad.ubicacion.lat.toFixed(4)}, ${actividad.ubicacion.lng.toFixed(4)}` : '-'}</span>
+              <span class="calendar-status status-confirmado">
+                Confirmado
               </span>
             </div>
           </div>
           <div class="calendar-activity-actions">
-            <button class="btn-ver-detalle-calendario" onclick="mostrarDetalleActividadCalendario(${actividad.id})">
+            <button class="btn-ver-detalle-calendario">
               <i class="fas fa-eye"></i> Ver
             </button>
-            <button class="btn-desinscribir-calendario" onclick="confirmarDesinscripcion(${actividad.id})">
+            <button class="btn-desinscribir-calendario">
               <i class="fas fa-times"></i> Salir
             </button>
           </div>
         </div>
       `;
+
+      // Asignar listeners correctamente
+      actividadCard.querySelector('.btn-ver-detalle-calendario').addEventListener('click', function(e) {
+        e.stopPropagation();
+        mostrarDetalleActividad(actividad.id);
+      });
+      actividadCard.querySelector('.btn-desinscribir-calendario').addEventListener('click', function(e) {
+        e.stopPropagation();
+        mostrarModalDesinscripcion(actividad.id);
+      });
+
       dayGroup.appendChild(actividadCard);
     });
-    
+
     calendarioContainer.appendChild(dayGroup);
   });
 }
@@ -373,17 +480,20 @@ function getCategoriaLabel(categoria) {
 }
 
 function renderUserListaActividades() {
+  const listaActividades = document.getElementById('listaActividades');
+  listaActividades.innerHTML = '';
+
+  // Filtros
   const busqueda = document.getElementById('filtroBusqueda').value.toLowerCase();
   const categoria = document.getElementById('filtroCategoria').value;
   const estado = document.getElementById('filtroEstado').value;
   const fecha = document.getElementById('filtroFecha').value;
   const ubicacion = document.getElementById('filtroUbicacion').value.toLowerCase();
 
-  const listaActividades = document.getElementById('listaActividades');
-  listaActividades.innerHTML = '';
-
-  // Filtrar actividades con base en los filtros
+  // Solo actividades aprobadas
   const actividadesFiltradas = window.actividades.filter(act => {
+    if (!act.aprobada) return false;
+
     const matchBusqueda = act.titulo.toLowerCase().includes(busqueda) ||
                           act.descripcion.toLowerCase().includes(busqueda);
     const matchCategoria = categoria === "" || (act.categoria && act.categoria === categoria);
@@ -391,6 +501,7 @@ function renderUserListaActividades() {
     const matchFecha = fecha === "" || act.fecha === fecha;
     const actUbicacion = act.ubicacion ? `${act.ubicacion.lat},${act.ubicacion.lng}` : "";
     const matchUbicacion = ubicacion === "" || actUbicacion.toLowerCase().includes(ubicacion);
+
     return matchBusqueda && matchCategoria && matchEstado && matchFecha && matchUbicacion;
   });
 
@@ -404,34 +515,35 @@ function renderUserListaActividades() {
     card.className = 'user-activity-card';
 
     card.innerHTML = `
-      <div class="detalle-content" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
-        <div class="detalle-info">
-          <div class="info-group">
-            <label><i class="fas fa-calendar"></i> Fecha:</label>
-            <span>${act.fecha || '-'}</span>
-          </div>
-          <div class="info-group">
-            <label><i class="fas fa-clock"></i> Hora:</label>
-            <span>${act.hora || '-'}</span>
-          </div>
-          <div class="info-group">
-            <label><i class="fas fa-map-marker-alt"></i> Ubicación:</label>
-            <span>${act.ubicacion ? `${act.ubicacion.lat.toFixed(4)}, ${act.ubicacion.lng.toFixed(4)}` : '-'}</span>
-          </div>
-          <div class="info-group">
-            <label><i class="fas fa-align-left"></i> Descripción:</label>
-            <p>${act.descripcion}</p>
-          </div>
-          <div class="info-group">
-            <label><i class="fas fa-users"></i> Límite de participantes:</label>
-            <span>${act.limite || '-'}</span>
-          </div>
+      <div class="user-activity-header">
+        <h3>${act.titulo}</h3>
+      </div>
+      <div class="user-activity-details">
+        <div class="info-group">
+          <label><i class="fas fa-calendar"></i> Fecha:</label>
+          <span>${act.fecha || '-'}</span>
         </div>
-        <div class="user-activity-actions" style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
-          <button class="btn-ver-detalle">
-            <i class="fas fa-eye"></i> Ver Detalle
-          </button>
+        <div class="info-group">
+          <label><i class="fas fa-clock"></i> Hora:</label>
+          <span>${act.hora || '-'}</span>
         </div>
+        <div class="info-group">
+          <label><i class="fas fa-map-marker-alt"></i> Ubicación:</label>
+          <span>${act.ubicacion ? `${act.ubicacion.lat.toFixed(4)}, ${act.ubicacion.lng.toFixed(4)}` : '-'}</span>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-align-left"></i> Descripción:</label>
+          <p>${act.descripcion}</p>
+        </div>
+        <div class="info-group">
+          <label><i class="fas fa-users"></i> Límite:</label>
+          <span>${act.limite || '-'}</span>
+        </div>
+      </div>
+      <div class="user-activity-actions">
+        <button class="btn-ver-detalle">
+          <i class="fas fa-eye"></i> Ver Detalle
+        </button>
       </div>
     `;
 
@@ -528,8 +640,7 @@ function eliminarActividad(actividadId, esPendiente) {
   
   if (actividad) {
     const tipoActividad = esPendiente ? 'pendiente' : 'aprobada';
-    alert(`Actividad "${actividad.titulo}" eliminada exitosamente.\nSe eliminaron todas las inscripciones asociadas.`);
-    
+  
     document.getElementById('modalEliminarActividad').style.display = 'none';
     renderGestionActividadesAdmin();
   }
@@ -870,65 +981,81 @@ function rechazarSolicitudModerador(solicitudId, motivo) {
 function renderActividadesPendientes() {
   const actividadesPendientes = document.getElementById('actividadesPendientes');
   if (!actividadesPendientes) return;
-  
+
+  const pendientes = window.actividades.filter(a => !a.aprobada);
+
   actividadesPendientes.innerHTML = '';
-  
-  if (actividadesPendientesMod.length === 0) {
+
+  if (pendientes.length === 0) {
     actividadesPendientes.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">No hay actividades pendientes de moderación</p>';
     return;
   }
-  
-  actividadesPendientesMod.forEach(actividad => {
+
+  pendientes.forEach(actividad => {
     const card = document.createElement('div');
     card.className = 'actividad-pendiente-card';
     card.innerHTML = `
       <div class="actividad-header">
         <h3>${actividad.titulo}</h3>
-        <span class="fecha-solicitud">Solicitado: ${actividad.fechaSolicitud}</span>
+        <span class="fecha-solicitud">Solicitado: ${actividad.fechaSolicitud || actividad.fecha}</span>
       </div>
       <div class="actividad-info">
-        <p><strong>Solicitante:</strong> ${actividad.solicitante}</p>
+        <p><strong>Solicitante:</strong> ${actividad.solicitante || '-'}</p>
         <p><strong>Límite:</strong> ${actividad.limite} participantes</p>
         <p><strong>Descripción:</strong> ${actividad.descripcion.substring(0, 100)}${actividad.descripcion.length > 100 ? '...' : ''}</p>
       </div>
       <div class="actividad-acciones">
-        <button class="btn-revisar" onclick="mostrarDetalleModeracion(${actividad.id})">
+        <button class="btn-revisar">
           <i class="fas fa-eye"></i> Revisar
         </button>
       </div>
     `;
+    // Asigna el listener aquí:
+    card.querySelector('.btn-revisar').addEventListener('click', function(e) {
+      e.stopPropagation();
+      window.mostrarDetalleModeracion(actividad.id);
+    });
     actividadesPendientes.appendChild(card);
   });
 }
 
 // Hacer las funciones globales para que funcionen con onclick
 window.mostrarDetalleModeracion = function(actividadId) {
-  const actividad = actividadesPendientesMod.find(act => act.id === actividadId);
+  // Buscar la actividad pendiente en window.actividades
+  const actividad = window.actividades.find(act => act.id === actividadId && !act.aprobada);
   if (!actividad) return;
-  
+
+  // Reiniciar y ocultar el formulario de rechazo SIEMPRE al entrar
+  document.getElementById('formularioRechazo').style.display = 'none';
+  document.getElementById('motivoRechazo').value = '';
+
   hideAllViews();
   document.getElementById('detalleModeracionContainer').style.display = 'block';
-  
+
   document.getElementById('modTitulo').textContent = actividad.titulo;
   document.getElementById('modDescripcion').textContent = actividad.descripcion;
-  document.getElementById('modSolicitante').textContent = actividad.solicitante;
+  document.getElementById('modSolicitante').textContent = actividad.solicitante || '-';
   document.getElementById('modLimite').textContent = actividad.limite;
-  document.getElementById('modFecha').textContent = actividad.fechaSolicitud;
-  
+  document.getElementById('modFecha').textContent = actividad.fechaSolicitud || actividad.fecha || '-';
+
   // Inicializar mapa de moderación
   if (window.moderacionMap) {
     window.moderacionMap.remove();
   }
-  window.moderacionMap = L.map('moderacionMapa').setView([actividad.ubicacion.lat, actividad.ubicacion.lng], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(window.moderacionMap);
-  L.marker([actividad.ubicacion.lat, actividad.ubicacion.lng]).addTo(window.moderacionMap);
-  
+  if (actividad.ubicacion && actividad.ubicacion.lat && actividad.ubicacion.lng) {
+    window.moderacionMap = L.map('moderacionMapa').setView([actividad.ubicacion.lat, actividad.ubicacion.lng], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(window.moderacionMap);
+    L.marker([actividad.ubicacion.lat, actividad.ubicacion.lng]).addTo(window.moderacionMap);
+  }
+
   // Configurar botones
   document.getElementById('btnAceptarActividad').onclick = () => aceptarActividad(actividadId);
   document.getElementById('btnRechazarActividad').onclick = () => mostrarFormularioRechazo(actividadId);
   document.getElementById('btnVolverModeracion').onclick = () => {
+    document.getElementById('formularioRechazo').style.display = 'none';
+    document.getElementById('motivoRechazo').value = '';
     hideAllViews();
     document.getElementById('moderarActividadesContainer').style.display = 'block';
     renderActividadesPendientes();
@@ -936,27 +1063,26 @@ window.mostrarDetalleModeracion = function(actividadId) {
 };
 
 function aceptarActividad(actividadId) {
-  const actividad = actividadesPendientesMod.find(act => act.id === actividadId);
+  const actividad = window.actividades.find(a => a.id === actividadId);
   if (actividad) {
-    // Agregar a la lista de actividades aprobadas
-    actividades.push({
-      id: actividad.id,
-      titulo: actividad.titulo,
-      descripcion: actividad.descripcion,
-      limite: actividad.limite,
-      ubicacion: actividad.ubicacion
-    });
-    inscritosPorActividad.set(actividad.id, 0);
-    
-    // Remover de pendientes
-    actividadesPendientesMod = actividadesPendientesMod.filter(act => act.id !== actividadId);
-    
+    actividad.aprobada = true;
     alert('Actividad aprobada exitosamente.');
     hideAllViews();
     document.getElementById('moderarActividadesContainer').style.display = 'block';
     renderActividadesPendientes();
   }
 }
+
+// Listeners para las flechas del calendario del carrusel
+document.getElementById('carouselPrevMonth')?.addEventListener('click', () => {
+  carouselCurrentDate.setMonth(carouselCurrentDate.getMonth() - 1);
+  renderCarouselMonthlyCalendar(carouselCurrentDate);
+});
+
+document.getElementById('carouselNextMonth')?.addEventListener('click', () => {
+  carouselCurrentDate.setMonth(carouselCurrentDate.getMonth() + 1);
+  renderCarouselMonthlyCalendar(carouselCurrentDate);
+});
 
 
 
@@ -979,9 +1105,7 @@ function mostrarFormularioRechazo(actividadId) {
 }
 
 function rechazarActividad(actividadId, motivo) {
-  // Remover de pendientes
-  actividadesPendientesMod = actividadesPendientesMod.filter(act => act.id !== actividadId);
-  
+  window.actividades = window.actividades.filter(a => a.id !== actividadId);
   alert(`Actividad rechazada. Motivo enviado al solicitante: "${motivo}"`);
   document.getElementById('formularioRechazo').style.display = 'none';
   hideAllViews();
@@ -1112,32 +1236,57 @@ let marker;
 
 
 
-  formActividad?.addEventListener('submit', (e) => {
-    e.preventDefault();
+formActividad?.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-    if (!marker) {
-      alert('Por favor selecciona una ubicación en el mapa antes de guardar la actividad.');
-      return;
-    }
+  if (!marker) {
+    alert('Por favor selecciona una ubicación en el mapa antes de guardar la actividad.');
+    return;
+  }
 
-    const nuevaActividad = {
-      id: Date.now(),
-      titulo: document.getElementById('tituloActividad').value,
-      descripcion: document.getElementById('descripcionActividad').value,
-      limite: parseInt(document.getElementById('limiteParticipantes').value),
-      ubicacion: marker ? marker.getLatLng() : null
-    };
-    actividades.push(nuevaActividad);
-    inscritosPorActividad.set(nuevaActividad.id, 0);
-    alert('Actividad guardada con éxito.');
-    formActividad.reset();
-    crearActividadContainer.style.display = 'none';
-    document.getElementById('dashboardView').style.display = 'block';
-  });
+  // Obtener el archivo de imagen (opcional)
+  const fileInput = document.getElementById('thumbnailEvento');
+  let portadaURL = '';
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    portadaURL = URL.createObjectURL(fileInput.files[0]);
+  }
+
+  const nuevaActividad = {
+    id: Date.now(),
+    titulo: document.getElementById('tituloActividad').value,
+    descripcion: document.getElementById('descripcionActividad').value,
+    limite: parseInt(document.getElementById('limiteParticipantes').value),
+    ubicacion: marker ? marker.getLatLng() : null,
+    inscritos: 0,
+    fecha: document.getElementById('fechaActividad').value,
+    hora: document.getElementById('horaActividad').value,
+    aprobada: false,
+    inscrito: false,
+    portada: portadaURL // <-- NUEVO ATRIBUTO
+  };
+
+  // Guardar en window.actividades
+  window.actividades.push(nuevaActividad);
+
+  // Mostrar notificación tipo modal
+  mostrarToastPropuestaActividad();
+
+  formActividad.reset();
+  crearActividadContainer.style.display = 'none';
+  document.getElementById('dashboardView').style.display = 'block';
+});
 
   filtroBusqueda?.addEventListener('input', () => {
     renderListaActividades();
   });
+
+  function mostrarToastPropuestaActividad() {
+  const modal = document.getElementById('modalPropuestaActividad');
+  modal.style.display = 'flex';
+  document.getElementById('btnCerrarModalPropuesta').onclick = function() {
+    modal.style.display = 'none';
+  };
+}
 
 
   function mostrarDetalleActividad(actividadId) {
@@ -1148,9 +1297,9 @@ let marker;
   const detalleContainer = document.getElementById('actividadDetalleContainer');
   detalleContainer.style.display = 'block';
 
-  // Verificar si el usuario está inscrito y obtener el número de inscritos
-  const estaInscrito = actividadesInscritas.some(a => a.id === actividadId);
-  const inscritosActuales = inscritosPorActividad.get(act.id) || 0;
+  // Usa solo el atributo de la actividad
+  const estaInscrito = act.inscrito === true;
+  const inscritosActuales = act.inscritos || 0;
 
   const contenedorAcciones = document.querySelector('.detalle-acciones');
   contenedorAcciones.innerHTML = '';
@@ -1185,6 +1334,7 @@ let marker;
     btnDesinscribirse.onclick = () => mostrarModalDesinscripcion(act.id);
     contenedorAcciones.appendChild(btnDesinscribirse);
   } else if (inscritosActuales >= act.limite) {
+    // Mostrar botón de cupo lleno solo si NO estoy inscrito
     const btnLleno = document.createElement('button');
     btnLleno.className = 'btn-accion-principal';
     btnLleno.disabled = true;
@@ -1200,40 +1350,22 @@ let marker;
 }
 
 function inscribirseEnActividad(actividadId) {
-  const actividad = window.actividades.find(act => act.id === actividadId);
+  const actividad = window.actividades.find(a => a.id === actividadId);
   if (!actividad) return;
-
-  const inscritosActuales = inscritosPorActividad.get(actividadId) || 0;
-  
-  if (inscritosActuales >= actividad.limite) {
+  if (!actividad.aprobada) {
+    alert('Esta actividad aún no ha sido aprobada.');
+    return;
+  }
+  if (actividad.inscrito) {
+    alert('Ya estás inscrito en esta actividad.');
+    return;
+  }
+  if (actividad.inscritos >= actividad.limite) {
     alert('Lo sentimos, esta actividad ya está llena.');
     return;
   }
-
-  // Incrementar el contador de inscritos
-  inscritosPorActividad.set(actividadId, inscritosActuales + 1);
-  
-  // Agregar a actividades inscritas
-  actividadesInscritas.push({
-    id: actividadId,
-    titulo: actividad.titulo,
-    fecha: actividad.fecha,
-    hora: actividad.hora,
-    ubicacion: actividad.ubicacion ? `${actividad.ubicacion.lat.toFixed(4)}, ${actividad.ubicacion.lng.toFixed(4)}` : 'No especificada',
-    estado: 'confirmado'
-  });
-
-  // Mostrar mensaje de éxito
-  const toast = document.createElement('div');
-  toast.className = 'toast-success';
-  toast.innerHTML = `
-    <i class="fas fa-check-circle"></i>
-    Te has inscrito exitosamente en "${actividad.titulo}"
-  `;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-
-  // Actualizar la vista de detalle
+  actividad.inscrito = true;
+  actividad.inscritos += 1;
   mostrarDetalleActividad(actividadId);
 }
 
@@ -1253,9 +1385,8 @@ window.confirmarDesinscripcion = function(actividadId) {
     actividadesInscritas = actividadesInscritas.filter(act => act.id !== actividadId);
     
     // Decrementar contador de inscritos
-    if (inscritosPorActividad.has(actividadId)) {
-      const inscritosActuales = inscritosPorActividad.get(actividadId);
-      inscritosPorActividad.set(actividadId, Math.max(0, inscritosActuales - 1));
+    if (actividad.inscritos && actividad.inscritos > 0) {
+    actividad.inscritos -= 1;
     }
     
     // Mostrar mensaje de éxito con toast
@@ -1390,12 +1521,28 @@ window.confirmarDesinscripcion = function(actividadId) {
   });
 
   // ───────── Lógica de Cerrar Sesión ─────────
-  const logoutLink = document.getElementById('logoutLink');
-  logoutLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Has cerrado sesión.');
-    window.location.href = 'index.html';
-  });
+ const logoutLink = document.getElementById('logoutLink');
+const modalCerrarSesion = document.getElementById('modalCerrarSesion');
+const btnConfirmarCerrarSesion = document.getElementById('btnConfirmarCerrarSesion');
+const btnCancelarCerrarSesion = document.getElementById('btnCancelarCerrarSesion');
+const notificacionLogout = document.getElementById('notificacionLogout');
+
+logoutLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  modalCerrarSesion.style.display = 'flex';
+});
+
+btnCancelarCerrarSesion.addEventListener('click', () => {
+  modalCerrarSesion.style.display = 'none';
+});
+
+btnConfirmarCerrarSesion.addEventListener('click', () => {
+  modalCerrarSesion.style.display = 'none';
+  // Mostrar notificación
+  window.location.href = 'index.html';
+  notificacionLogout.style.display = 'flex';
+  // Redirigir después de la animación (2.5s)
+});
 
   const btnSolicitudModerador = document.getElementById('btnSolicitudModerador');
   const solicitudContainer = document.getElementById('solicitudModeradorContainer');
@@ -1496,33 +1643,33 @@ function renderCarouselMonthlyCalendar(date) {
   }
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const dayCell = document.createElement('div');
-    dayCell.classList.add('day');
+  const dayCell = document.createElement('div');
+  dayCell.classList.add('day');
 
-    const dayNumber = document.createElement('div');
-    dayNumber.classList.add('day-number');
-    dayNumber.textContent = day;
-    dayCell.appendChild(dayNumber);
+  const dayNumber = document.createElement('div');
+  dayNumber.classList.add('day-number');
+  dayNumber.textContent = day;
+  dayCell.appendChild(dayNumber);
 
-    const dayStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    
-    // Filtra las actividades para este día usando window.actividades (asegúrate de que esté definido globalmente)
-    const eventsForDay = window.actividades.filter(activity => activity.fecha === dayStr);
-    // Dentro del bucle que crea las celdas para cada día…
-    if (eventsForDay.length > 0) {
-      const indicator = document.createElement('div');
-      indicator.classList.add('event-indicator');
-      dayCell.appendChild(indicator);
-    }
+  const dayStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-    
-    // Listener para mostrar el modal de actividades si se hace click (opcional)
-    dayCell.addEventListener('click', () => {
-      showActivitiesForDay(dayStr, eventsForDay);
-    });
+  // SOLO actividades aprobadas
+  const eventsForDay = window.actividades.filter(
+    activity => activity.fecha === dayStr && activity.aprobada
+  );
 
-    calendarGrid.appendChild(dayCell);
+  if (eventsForDay.length > 0) {
+    const indicator = document.createElement('div');
+    indicator.classList.add('event-indicator');
+    dayCell.appendChild(indicator);
   }
+
+  dayCell.addEventListener('click', () => {
+    showActivitiesForDay(dayStr, eventsForDay);
+  });
+
+  calendarGrid.appendChild(dayCell);
+}
 }
 
 function obtenerActividadDestacada() {
@@ -1636,29 +1783,10 @@ function mostrarModalDesinscripcion(actividadId) {
 
 // Función para procesar la desinscripción
 function procesarDesinscripcion(actividadId) {
-  const actividad = window.actividades.find(act => act.id === actividadId);
-  if (!actividad) return;
-
-  // Remover de actividades inscritas
-  actividadesInscritas = actividadesInscritas.filter(act => act.id !== actividadId);
-  
-  // Decrementar contador de inscritos
-  if (inscritosPorActividad.has(actividadId)) {
-    const inscritosActuales = inscritosPorActividad.get(actividadId);
-    inscritosPorActividad.set(actividadId, Math.max(0, inscritosActuales - 1));
-  }
-
-  // Mostrar mensaje de éxito con toast
-  const toast = document.createElement('div');
-  toast.className = 'toast-success';
-  toast.innerHTML = `
-    <i class="fas fa-check-circle"></i>
-    Te has desinscrito exitosamente de "${actividad.titulo}"
-  `;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-
-  // Actualizar la vista de detalle inmediatamente
+  const actividad = window.actividades.find(a => a.id === actividadId);
+  if (!actividad || !actividad.inscrito) return;
+  actividad.inscrito = false;
+  if (actividad.inscritos > 0) actividad.inscritos -= 1;
   mostrarDetalleActividad(actividadId);
 }
 
