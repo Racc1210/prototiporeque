@@ -6,11 +6,6 @@ console.log(
   (window.usuarios || []).map(u => `Correo: ${u.correo}, Contraseña: ${u.contraseña}`)
 );
 
-// Obtener el correo guardado en el registro
-const usuarioTemporal = JSON.parse(localStorage.getItem("usuarioTemporal"));
-if (!usuarioTemporal) {
-  window.location.href = "registro.html"; // Si no hay datos, redirige al registro
-}
 
 // Validar código al enviar el formulario
 document.getElementById("formVerificacion").addEventListener("submit", function(e) {
